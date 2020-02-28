@@ -1968,6 +1968,45 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   mpc: {},
   props: ['id'],
@@ -1975,13 +2014,38 @@ __webpack_require__.r(__webpack_exports__);
     this.read();
   },
   methods: {
-    sliderImageChange: function sliderImageChange() {
-      console.log('slider image changed');
+    descriptionChange: function descriptionChange(e) {},
+    titleChange: function titleChange(e) {
+      var input = e.target;
+      this.$refs.sliderCaption.innerText = input.value;
+    },
+    sliderCaptionChange: function sliderCaptionChange(e) {
+      var input = e.target;
+      this.$refs.sliderCaption.style.backgroundColor = input.value;
+    },
+    sliderImageChange: function sliderImageChange(e) {
+      var self = this;
+      var file = e.target.files[0];
+      var reader = new FileReader();
+      reader.readAsDataURL(file);
+
+      reader.onload = function () {
+        self.$refs.imagePreview.style.backgroundImage = "url(\"".concat(reader.result, "\")");
+      };
+    },
+    screenImageChange: function screenImageChange(e) {
+      var self = this;
+      var file = e.target.files[0];
+      var reader = new FileReader();
+      reader.readAsDataURL(file);
+
+      reader.onload = function () {
+        self.$refs.screenPreview.style.backgroundImage = "url(\"".concat(reader.result, "\")");
+      };
     },
     read: function read() {
       var _this = this;
 
-      console.log(this.id);
       axios.post('/api/mpc', {
         method: 'getMPC',
         id: this.id
@@ -6547,7 +6611,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "\n.sc-wrapper[data-v-3c008bbe] {\n}\n.edit-container[data-v-3c008bbe] {\n    display: flex;\n}\n.slider-preview[data-v-3c008bbe] {\n    padding: 5px;\n}\n.slider-params[data-v-3c008bbe] {\n    padding: 5px;\n}\n.image[data-v-3c008bbe] {\n    position: relative;\n    width: 194px;\n    height: 354px;\n    background-size: cover;\n    box-shadow: 0px 2px 50px rgba(14, 41, 60, 0.521569);\n    margin-right: 2em;\n}\n.caption[data-v-3c008bbe] {\n    position: absolute;\n    height: 25%;\n    background-color: #456789;\n    width: 100%;\n    left: 10%;\n    bottom: 35%;\n\n    color: white;\n    font-family: Hind;\n    font-style: normal;\n    font-weight: 500;\n    font-size: 22px;\n    line-height: 32px;\n    padding: 12px;\n}\n.button[data-v-3c008bbe] {\n}\n", ""]);
+exports.push([module.i, "\n.sc-wrapper[data-v-3c008bbe] {\n    display: block;\n}\n.edit-container[data-v-3c008bbe] {\n    display: flex;\n    align-content: space-between;\n}\n/* .slider-preview {} */\n.slider-params[data-v-3c008bbe] {\n    padding: 5px;\n    flex: 2;\n}\n.image[data-v-3c008bbe] {\n    position: relative;\n    width: 194px;\n    height: 354px;\n    background-size: cover;\n    box-shadow: 0px 2px 50px rgba(14, 41, 60, 0.521569);\n    margin-right: 2em;\n}\n.caption[data-v-3c008bbe] {\n    position: absolute;\n    height: 25%;\n    background-color: #456789;\n    width: 100%;\n    left: 10%;\n    bottom: 35%;\n\n    color: white;\n    font-family: Hind;\n    font-style: normal;\n    font-weight: 500;\n    font-size: 22px;\n    line-height: 32px;\n    padding: 12px;\n}\n.button[data-v-3c008bbe] {\n    position: absolute;\n    bottom: 19%;\n    border: 3px solid #00E1C6;\n    height: 10%;\n    width: 60%;\n    left: 20%;\n    font-family: Hind;\n    font-style: normal;\n    font-weight: 600;\n    font-size: 18px;\n    line-height: 32px;\n    align-items: center;\n    text-align: center;\n    color: #FFFFFF;\n    cursor: pointer;\n}\n.button[data-v-3c008bbe]:hover {\n    background: linear-gradient(165.21deg, #00E1C6 0%, #19BBD5 100%);\n}\n.screen-wrapper[data-v-3c008bbe] {\n    height: 50vh;\n    background-color: gray;\n    position: relative;\n    margin: 15px 0;\n    box-shadow: inset 0px 0px 4px #000;\n}\n.page-preview[data-v-3c008bbe] {\n    height: 100%;\n    width: 80%;\n    background-color: #fff;\n    margin: 0 auto;\n    overflow: hidden;\n    border-top: 1px solid #adb5bd;\n    border-bottom: 1px solid #adb5bd;\n    display: flex;\n    align-items: center;\n    position: relative;\n}\n.screen-preview[data-v-3c008bbe] {\n    position: absolute;\n    background-size: cover;\n    background-color: rgba(14, 41, 60, 0.521569);\n    width: 80%;\n    height: 70%;\n    left: 10%;\n    top: 20%;\n    box-shadow: 0px 2px 50px rgba(14, 41, 60, 0.168627);\n}\n.screen-title[data-v-3c008bbe] {\n    position: absolute;\n    left: 10%;\n    top: 10%;\n}\n", ""]);
 
 // exports
 
@@ -38066,57 +38130,162 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "edit-container" }, [
-    _c("div", { staticClass: "slider-preview" }, [
-      _vm.loading
-        ? _c("div", [_vm._v("loading...")])
-        : _c("div", { staticClass: "sc-wrapper" }, [
-            _c(
-              "div",
-              {
-                staticClass: "image",
-                style: { backgroundImage: "url(" + _vm.mpc.screen_image + ")" }
-              },
-              [
-                _c("div", { staticClass: "caption" }, [
-                  _vm._v(_vm._s(_vm.mpc.title))
+  return _c("div", { staticClass: "editor-wrapper" }, [
+    _c("div", { staticClass: "edit-container" }, [
+      _c("div", { staticClass: "slider-preview" }, [
+        _vm.loading
+          ? _c("div", [_vm._v("loading...")])
+          : _c("div", { staticClass: "sc-wrapper" }, [
+              _c(
+                "div",
+                {
+                  ref: "imagePreview",
+                  staticClass: "image",
+                  style: {
+                    backgroundImage: "url(" + _vm.mpc.screen_image + ")"
+                  }
+                },
+                [
+                  _c("div", { ref: "sliderCaption", staticClass: "caption" }, [
+                    _vm._v(_vm._s(_vm.mpc.title))
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "button" }, [_vm._v("ZJISTIT VÍCE")])
+                ]
+              )
+            ])
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "slider-params" }, [
+        _c("div", { staticClass: "container" }, [
+          _c("div", { staticClass: "card" }, [
+            _c("h2", { staticClass: "card-header" }, [
+              _vm._v("Slider component editor")
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "row card-body" }, [
+              _c("div", { staticClass: "col-3" }, [
+                _c("div", {}, [
+                  _c("input", {
+                    ref: "sliderImageInput",
+                    staticStyle: { display: "none" },
+                    attrs: { type: "file", name: "slider_image" },
+                    on: { change: _vm.sliderImageChange }
+                  }),
+                  _vm._v(" "),
+                  _c(
+                    "button",
+                    {
+                      staticClass: "btn btn-primary form-control",
+                      on: {
+                        click: function($event) {
+                          return _vm.$refs.sliderImageInput.click()
+                        }
+                      }
+                    },
+                    [_vm._v("pick slider image")]
+                  )
                 ]),
                 _vm._v(" "),
-                _c("div", { staticClass: "button" }, [_vm._v("go")])
-              ]
-            )
+                _c("br"),
+                _vm._v(" "),
+                _c("div", {}, [
+                  _c("input", {
+                    ref: "screenImageInput",
+                    staticStyle: { display: "none" },
+                    attrs: { type: "file", name: "screen_image" },
+                    on: { change: _vm.screenImageChange }
+                  }),
+                  _vm._v(" "),
+                  _c(
+                    "button",
+                    {
+                      staticClass: "btn btn-primary form-control",
+                      on: {
+                        click: function($event) {
+                          return _vm.$refs.screenImageInput.click()
+                        }
+                      }
+                    },
+                    [_vm._v("pick screen image")]
+                  )
+                ]),
+                _vm._v(" "),
+                _c("br"),
+                _vm._v(" "),
+                _c("div", {}, [
+                  _c("div", { staticClass: "input-group" }, [
+                    _vm._m(0),
+                    _vm._v(" "),
+                    _c("input", {
+                      staticClass: "form-control",
+                      attrs: {
+                        type: "text",
+                        name: "slider_caption_color",
+                        placeholder: "#456789"
+                      },
+                      on: { change: _vm.sliderCaptionChange }
+                    })
+                  ])
+                ]),
+                _vm._v(" "),
+                _c("br")
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "col-9" }, [
+                _vm.loading
+                  ? _c("div", [_vm._v("loading...")])
+                  : _c("div", {}, [
+                      _c("label", [_vm._v("Title")]),
+                      _vm._v(" "),
+                      _c("input", {
+                        ref: "titleInput",
+                        staticClass: "form-control",
+                        attrs: { type: "text", name: "title" },
+                        domProps: { value: _vm.mpc.title },
+                        on: { change: _vm.titleChange }
+                      }),
+                      _vm._v(" "),
+                      _c("label", [_vm._v("Description")]),
+                      _vm._v(" "),
+                      _c(
+                        "textarea",
+                        {
+                          ref: "descriptionInput",
+                          staticClass: "form-control",
+                          on: { change: _vm.descriptionChange }
+                        },
+                        [_vm._v(_vm._s(_vm.mpc.description))]
+                      )
+                    ])
+              ])
+            ])
           ])
+        ])
+      ])
     ]),
     _vm._v(" "),
-    _c("div", { staticClass: "slider-params" }, [
-      _c("div", { staticClass: "container" }, [
-        _c("div", { staticClass: "row" }, [
-          _c("input", {
-            ref: "sliderImageInput",
-            staticStyle: { display: "none" },
-            attrs: { type: "file", name: "slider_image" },
-            on: { change: _vm.sliderImageChange }
-          }),
-          _vm._v(" "),
-          _c(
-            "button",
-            {
-              staticClass: "btn btn-primary col-12",
-              on: {
-                click: function($event) {
-                  return _vm.$refs.sliderImageInput.click()
-                }
-              }
-            },
-            [_vm._v("pick slider image")]
-          )
-        ]),
+    _c("div", { staticClass: "container screen-wrapper" }, [
+      _c("div", { staticClass: "page-preview" }, [
+        _vm.loading ? _c("div", [_vm._v("loading...")]) : _vm._e(),
         _vm._v(" "),
-        _c("br"),
+        !_vm.loading
+          ? _c("div", { ref: "screenTitle", staticClass: "screen-title" }, [
+              _vm._v(
+                "\n                " + _vm._s(_vm.mpc.title) + "\n            "
+              )
+            ])
+          : _vm._e(),
         _vm._v(" "),
-        _vm._m(0),
-        _vm._v(" "),
-        _c("br")
+        !_vm.loading
+          ? _c("div", { ref: "screenPreview", staticClass: "screen-preview" }, [
+              _vm._v(
+                "\n                " +
+                  _vm._s(_vm.mpc.description) +
+                  "\n            "
+              )
+            ])
+          : _vm._e()
       ])
     ])
   ])
@@ -38126,15 +38295,8 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "row" }, [
-      _c("input", {
-        staticClass: "form-control col-12",
-        attrs: {
-          type: "text",
-          name: "slider_caption_color",
-          placeholder: "#456789"
-        }
-      })
+    return _c("div", { staticClass: "input-group-prepend" }, [
+      _c("div", { staticClass: "input-group-text" }, [_vm._v("BG color")])
     ])
   }
 ]
@@ -50559,8 +50721,8 @@ __webpack_require__.r(__webpack_exports__);
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! /mnt/d/projects/tbm_os/resources/js/app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! /mnt/d/projects/tbm_os/resources/sass/app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! /var/www/tbmos/resources/js/app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! /var/www/tbmos/resources/sass/app.scss */"./resources/sass/app.scss");
 
 
 /***/ })

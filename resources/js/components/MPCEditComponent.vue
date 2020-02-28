@@ -1,25 +1,64 @@
 <template>
-    <div class="edit-container">
-        <div class="slider-preview">
-            <div v-if="loading">loading...</div>
-            <div v-else class="sc-wrapper">
-                <div class="image" v-bind:style="{ backgroundImage: 'url(' + mpc.screen_image + ')' }">
-                    <div class="caption">{{mpc.title}}</div>
-                    <div class="button">go</div>
+    <div class="editor-wrapper">
+        <div class="edit-container">
+            <div class="slider-preview">
+                <div v-if="loading">loading...</div>
+                <div v-else class="sc-wrapper">
+                    <div class="image" ref="imagePreview" v-bind:style="{ backgroundImage: 'url(' + mpc.screen_image + ')' }">
+                        <div ref="sliderCaption" class="caption">{{mpc.title}}</div>
+                        <div class="button">ZJISTIT VÍCE</div>
+                    </div>
+                </div>
+            </div>
+            <div class="slider-params">
+                <div class="container">
+                    <div class="card">
+                        <h2 class="card-header">Slider component editor</h2>
+                        <div class="row card-body">
+                            <div class="col-3">
+                                <div class="">
+                                    <input type="file" name="slider_image" style="display:none;" ref="sliderImageInput" @change="sliderImageChange">
+                                    <button class="btn btn-primary form-control" @click="$refs.sliderImageInput.click()">pick slider image</button>
+                                </div>
+                                <br>
+                                <div class="">
+                                    <input type="file" name="screen_image" style="display:none;" ref="screenImageInput" @change="screenImageChange">
+                                    <button class="btn btn-primary form-control" @click="$refs.screenImageInput.click()">pick screen image</button>
+                                </div>
+                                <br>
+                                <div class="">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text">BG color</div>
+                                        </div>
+                                        <input type="text" name="slider_caption_color" placeholder="#456789" class="form-control" @change="sliderCaptionChange">
+                                    </div>
+                                </div>
+                                <br>
+                            </div>
+                            <div class="col-9">
+                                <div v-if="loading">loading...</div>
+                                <div v-else class="">
+                                    <label>Title</label>
+                                    <input class="form-control" type="text" name="title" ref="titleInput" @change="titleChange" :value="mpc.title">
+                                    <label>Description</label>
+                                    <textarea class="form-control" ref="descriptionInput" @change="descriptionChange">{{mpc.description}}</textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="slider-params">
-            <div class="container">
-                <div class="row">
-                    <input type="file" name="slider_image" style="display:none;" ref="sliderImageInput" @change="sliderImageChange">
-                    <button class="btn btn-primary col-12" @click="$refs.sliderImageInput.click()">pick slider image</button>
+        <div class="container screen-wrapper">
+            <div class="page-preview">
+                <div v-if="loading">loading...</div>
+                <div v-if="!loading" class="screen-title" ref="screenTitle">
+                    {{mpc.title}}
                 </div>
-                <br>
-                <div class="row">
-                    <input type="text" name="slider_caption_color" placeholder="#456789" class="form-control col-12">
+                <div v-if="!loading" class="screen-preview" ref="screenPreview">
+                    {{mpc.description}}
                 </div>
-                <br>
             </div>
         </div>
     </div>
@@ -33,11 +72,40 @@
             this.read()
         },
         methods: {
-            sliderImageChange() {
-                console.log('slider image changed');
+            descriptionChange(e) {
+
+            },
+            titleChange(e) {
+                const input = e.target
+                this.$refs.sliderCaption.innerText = input.value
+            },
+            sliderCaptionChange(e) {
+                const input = e.target
+                this.$refs.sliderCaption.style.backgroundColor = input.value;
+            },
+            sliderImageChange(e) {
+                const self = this
+                let file = e.target.files[0]
+                let reader = new FileReader()
+
+                reader.readAsDataURL(file)
+
+                reader.onload = function() {
+                    self.$refs.imagePreview.style.backgroundImage = `url("${reader.result}")`
+                }
+            },
+            screenImageChange(e) {
+                const self = this
+                let file = e.target.files[0]
+                let reader = new FileReader()
+
+                reader.readAsDataURL(file)
+
+                reader.onload = function() {
+                    self.$refs.screenPreview.style.backgroundImage = `url("${reader.result}")`
+                }
             },
             read() {
-                console.log(this.id);
                 axios.post('/api/mpc', {method:'getMPC', id:this.id}).then((response) => {
                     this.mpc = response.data
                 })
@@ -56,15 +124,16 @@
 
 <style scoped>
 .sc-wrapper {
+    display: block;
 }
 .edit-container {
     display: flex;
+    align-content: space-between;
 }
-.slider-preview {
-    padding: 5px;
-}
+/* .slider-preview {} */
 .slider-params {
     padding: 5px;
+    flex: 2;
 }
 .image {
     position: relative;
@@ -91,6 +160,57 @@
     padding: 12px;
 }
 .button {
-
+    position: absolute;
+    bottom: 19%;
+    border: 3px solid #00E1C6;
+    height: 10%;
+    width: 60%;
+    left: 20%;
+    font-family: Hind;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 18px;
+    line-height: 32px;
+    align-items: center;
+    text-align: center;
+    color: #FFFFFF;
+    cursor: pointer;
+}
+.button:hover {
+    background: linear-gradient(165.21deg, #00E1C6 0%, #19BBD5 100%);
+}
+.screen-wrapper {
+    height: 50vh;
+    background-color: gray;
+    position: relative;
+    margin: 15px 0;
+    box-shadow: inset 0px 0px 4px #000;
+}
+.page-preview {
+    height: 100%;
+    width: 80%;
+    background-color: #fff;
+    margin: 0 auto;
+    overflow: hidden;
+    border-top: 1px solid #adb5bd;
+    border-bottom: 1px solid #adb5bd;
+    display: flex;
+    align-items: center;
+    position: relative;
+}
+.screen-preview {
+    position: absolute;
+    background-size: cover;
+    background-color: rgba(14, 41, 60, 0.521569);
+    width: 80%;
+    height: 70%;
+    left: 10%;
+    top: 20%;
+    box-shadow: 0px 2px 50px rgba(14, 41, 60, 0.168627);
+}
+.screen-title {
+    position: absolute;
+    left: 10%;
+    top: 10%;
 }
 </style>

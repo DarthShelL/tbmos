@@ -12,7 +12,7 @@
             </div>
             <div class="slider-params">
                 <div class="container">
-                    <div class="card">
+                    <div class="row card">
                         <h2 class="card-header">Slider component editor</h2>
                         <div class="row card-body">
                             <div class="col-3">
@@ -35,6 +35,15 @@
                                     </div>
                                 </div>
                                 <br>
+                                <div class="">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text">Font color</div>
+                                        </div>
+                                        <input type="text" name="font_color" placeholder="#ffffff" class="form-control" @change="screenFontColorChange">
+                                    </div>
+                                </div>
+                                <br>
                             </div>
                             <div class="col-9">
                                 <div v-if="loading">loading...</div>
@@ -42,7 +51,7 @@
                                     <label>Title</label>
                                     <input class="form-control" type="text" name="title" ref="titleInput" @change="titleChange" :value="mpc.title">
                                     <label>Description</label>
-                                    <textarea class="form-control" ref="descriptionInput" @change="descriptionChange">{{mpc.description}}</textarea>
+                                    <textarea class="form-control" ref="descriptionInput" rows="7" @change="descriptionChange">{{mpc.description}}</textarea>
                                 </div>
                             </div>
                         </div>
@@ -73,7 +82,8 @@
         },
         methods: {
             descriptionChange(e) {
-
+                const input = e.target
+                this.$refs.screenPreview.innerText = input.value
             },
             titleChange(e) {
                 const input = e.target
@@ -81,7 +91,11 @@
             },
             sliderCaptionChange(e) {
                 const input = e.target
-                this.$refs.sliderCaption.style.backgroundColor = input.value;
+                this.$refs.sliderCaption.style.backgroundColor = input.value
+            },
+            screenFontColorChange(e) {
+                const input = e.target
+                this.$refs.screenPreview.style.color = input.value
             },
             sliderImageChange(e) {
                 const self = this
@@ -132,7 +146,6 @@
 }
 /* .slider-preview {} */
 .slider-params {
-    padding: 5px;
     flex: 2;
 }
 .image {
@@ -207,10 +220,24 @@
     left: 10%;
     top: 20%;
     box-shadow: 0px 2px 50px rgba(14, 41, 60, 0.168627);
+    font-family: Hind;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 20px;
+    color: #ffffff;
+    padding: 15px;
+    text-shadow: 0px 0px 5px #000;
 }
 .screen-title {
     position: absolute;
-    left: 10%;
-    top: 10%;
+    left: 12%;
+    top: 5%;
+    font-family: Hind;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 28px;
+    line-height: 77px;
+    color: #0E293C;
 }
 </style>

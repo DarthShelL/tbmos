@@ -2,9 +2,14 @@
     <div class="editor-wrapper">
         <div class="edit-container">
             <div class="slider-preview">
-                <div v-if="loading">loading...</div>
+                <div v-if="loading" class="sc-wrapper">
+                    <div class="image" ref="imagePreview">
+                        <div ref="sliderCaption" class="caption"></div>
+                        <div class="button">ZJISTIT VÍCE</div>
+                    </div>
+                </div>
                 <div v-else class="sc-wrapper">
-                    <div class="image" ref="imagePreview" v-bind:style="{ backgroundImage: 'url(' + mpc.screen_image + ')' }">
+                    <div class="image" ref="imagePreview" v-bind:style="{ backgroundImage: 'url(' + mpc.slider_image + ')' }">
                         <div ref="sliderCaption" class="caption">{{mpc.title}}</div>
                         <div class="button">ZJISTIT VÍCE</div>
                     </div>
@@ -31,7 +36,7 @@
                                         <div class="input-group-prepend">
                                             <div class="input-group-text">BG color</div>
                                         </div>
-                                        <input type="text" name="slider_caption_color" placeholder="#456789" class="form-control" @change="sliderCaptionChange">
+                                        <input type="text" name="slider_caption_color" placeholder="#456789" class="form-control" @change="sliderCaptionChange" ref="captionColorInput">
                                     </div>
                                 </div>
                                 <br>
@@ -40,13 +45,21 @@
                                         <div class="input-group-prepend">
                                             <div class="input-group-text">Font color</div>
                                         </div>
-                                        <input type="text" name="font_color" placeholder="#ffffff" class="form-control" @change="screenFontColorChange">
+                                        <input type="text" name="font_color" placeholder="#ffffff" class="form-control" @change="screenFontColorChange" ref="fontColorInput">
                                     </div>
                                 </div>
                                 <br>
+                                <div class="">
+                                    <button class="btn btn-success form-control" @click="saveComponent">Save</button>
+                                </div>
                             </div>
                             <div class="col-9">
-                                <div v-if="loading">loading...</div>
+                                <div v-if="loading">
+                                    <label>Title</label>
+                                    <input class="form-control" type="text" name="title" ref="titleInput" @change="titleChange">
+                                    <label>Description</label>
+                                    <textarea class="form-control" ref="descriptionInput" rows="7" @change="descriptionChange"></textarea>
+                                </div>
                                 <div v-else class="">
                                     <label>Title</label>
                                     <input class="form-control" type="text" name="title" ref="titleInput" @change="titleChange" :value="mpc.title">
@@ -61,12 +74,50 @@
         </div>
         <div class="container screen-wrapper">
             <div class="page-preview">
-                <div v-if="loading">loading...</div>
+                <div v-if="loading" class="screen-title" ref="screenTitle"></div>
+                <div v-if="loading" class="screen-preview" ref="screenPreview"></div>
+
                 <div v-if="!loading" class="screen-title" ref="screenTitle">
                     {{mpc.title}}
                 </div>
-                <div v-if="!loading" class="screen-preview" ref="screenPreview">
+                <div v-if="!loading" class="screen-preview" ref="screenPreview" v-bind:style="{ backgroundImage: 'url(' + mpc.screen_image + ')' }">
                     {{mpc.description}}
+                </div>
+            </div>
+        </div>
+        <!-- Modal -->
+        <div class="modal fade" ref="errorModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Oooops!</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body" ref="errorModalBody">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Modal -->
+        <div class="modal fade" ref="successModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Lovely success message!</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body" ref="successModalBody">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -78,9 +129,64 @@
         mpc: {},
         props: ['id'],
         mounted() {
-            this.read()
+            if (this.id) {
+                this.read()
+            }
         },
         methods: {
+            saveComponent(e) {
+                const self = this;
+                const fd = new FormData();
+
+                if (this.id) {
+                    fd.set('method', 'updateMPC')
+                    fd.set('id', this.id)
+                } else {
+                    fd.set('method', 'createMPC')
+                }
+                fd.set('title', this.$refs.sliderCaption.innerText.trim())
+                fd.set('description', this.$refs.screenPreview.innerText.trim())
+                if (this.$refs.sliderImageInput.files.length > 0) {
+                    fd.append('slider_image', this.$refs.sliderImageInput.files[0])
+                }
+                if (this.$refs.screenImageInput.files.length) {
+                    fd.append('screen_image', this.$refs.screenImageInput.files[0])
+                }
+                fd.set('caption_color', this.$refs.captionColorInput.value.trim() === '' ? '#456789' : this.$refs.captionColorInput.value)
+                fd.set('font_color', this.$refs.fontColorInput.value.trim() === '' ? '#ffffff' : this.$refs.fontColorInput.value)
+
+                axios({
+                    method: 'post',
+                    url: '/api/mpc',
+                    data: fd,
+                    headers: {'Content-Type': 'multipart/form-data' }
+                })
+                .then(function (response) {
+                    //handle success
+                    const answer = response.data
+
+                    if (answer.error === true) {
+                        let msg = '';
+                        for (const err in answer.msg) {
+                            for (const e of answer.msg[err]) {
+                                msg += `[${err}]: ${e}<br>`;
+                            }
+                        }
+
+                        self.$refs.errorModalBody.innerHTML = `<p class="alert alert-danger">${msg}</p>`
+                        $(self.$refs.errorModal).modal('toggle')
+                    } else {
+                        self.$refs.successModalBody.innerHTML = `<p class="alert alert-success">Saved!</p>`
+                        $(self.$refs.successModal).modal('toggle')
+                        this.id = answer.data.id
+                        this.read()
+                    }
+                })
+                .catch(function (response) {
+                    //handle error
+                    console.log(response)
+                })
+            },
             descriptionChange(e) {
                 const input = e.target
                 this.$refs.screenPreview.innerText = input.value
@@ -88,6 +194,7 @@
             titleChange(e) {
                 const input = e.target
                 this.$refs.sliderCaption.innerText = input.value
+                this.$refs.screenTitle.innerText = input.value
             },
             sliderCaptionChange(e) {
                 const input = e.target
@@ -121,7 +228,7 @@
             },
             read() {
                 axios.post('/api/mpc', {method:'getMPC', id:this.id}).then((response) => {
-                    this.mpc = response.data
+                    this.mpc = response.data.data
                 })
                 .catch(err => console.error(err))
                 .finally(() => (this.loading = false))
@@ -150,8 +257,8 @@
 }
 .image {
     position: relative;
-    width: 194px;
-    height: 354px;
+    width: 222px;
+    height: 413px;
     background-size: cover;
     box-shadow: 0px 2px 50px rgba(14, 41, 60, 0.521569);
     margin-right: 2em;
@@ -183,7 +290,7 @@
     font-style: normal;
     font-weight: 600;
     font-size: 18px;
-    line-height: 32px;
+    line-height: 37px;
     align-items: center;
     text-align: center;
     color: #FFFFFF;

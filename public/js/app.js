@@ -2016,13 +2016,143 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   mpc: {},
   props: ['id'],
   mounted: function mounted() {
-    this.read();
+    if (this.id) {
+      this.read();
+    }
   },
   methods: {
+    saveComponent: function saveComponent(e) {
+      var self = this;
+      var fd = new FormData();
+
+      if (this.id) {
+        fd.set('method', 'updateMPC');
+        fd.set('id', this.id);
+      } else {
+        fd.set('method', 'createMPC');
+      }
+
+      fd.set('title', this.$refs.sliderCaption.innerText.trim());
+      fd.set('description', this.$refs.screenPreview.innerText.trim());
+
+      if (this.$refs.sliderImageInput.files.length > 0) {
+        fd.append('slider_image', this.$refs.sliderImageInput.files[0]);
+      }
+
+      if (this.$refs.screenImageInput.files.length) {
+        fd.append('screen_image', this.$refs.screenImageInput.files[0]);
+      }
+
+      fd.set('caption_color', this.$refs.captionColorInput.value.trim() === '' ? '#456789' : this.$refs.captionColorInput.value);
+      fd.set('font_color', this.$refs.fontColorInput.value.trim() === '' ? '#ffffff' : this.$refs.fontColorInput.value);
+      axios({
+        method: 'post',
+        url: '/api/mpc',
+        data: fd,
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      }).then(function (response) {
+        //handle success
+        var answer = response.data;
+
+        if (answer.error === true) {
+          var msg = '';
+
+          for (var err in answer.msg) {
+            var _iteratorNormalCompletion = true;
+            var _didIteratorError = false;
+            var _iteratorError = undefined;
+
+            try {
+              for (var _iterator = answer.msg[err][Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+                var _e = _step.value;
+                msg += "[".concat(err, "]: ").concat(_e, "<br>");
+              }
+            } catch (err) {
+              _didIteratorError = true;
+              _iteratorError = err;
+            } finally {
+              try {
+                if (!_iteratorNormalCompletion && _iterator["return"] != null) {
+                  _iterator["return"]();
+                }
+              } finally {
+                if (_didIteratorError) {
+                  throw _iteratorError;
+                }
+              }
+            }
+          }
+
+          self.$refs.errorModalBody.innerHTML = "<p class=\"alert alert-danger\">".concat(msg, "</p>");
+          $(self.$refs.errorModal).modal('toggle');
+        } else {
+          self.$refs.successModalBody.innerHTML = "<p class=\"alert alert-success\">Saved!</p>";
+          $(self.$refs.successModal).modal('toggle');
+          this.id = answer.data.id;
+          this.read();
+        }
+      })["catch"](function (response) {
+        //handle error
+        console.log(response);
+      });
+    },
     descriptionChange: function descriptionChange(e) {
       var input = e.target;
       this.$refs.screenPreview.innerText = input.value;
@@ -2030,6 +2160,7 @@ __webpack_require__.r(__webpack_exports__);
     titleChange: function titleChange(e) {
       var input = e.target;
       this.$refs.sliderCaption.innerText = input.value;
+      this.$refs.screenTitle.innerText = input.value;
     },
     sliderCaptionChange: function sliderCaptionChange(e) {
       var input = e.target;
@@ -2066,7 +2197,7 @@ __webpack_require__.r(__webpack_exports__);
         method: 'getMPC',
         id: this.id
       }).then(function (response) {
-        _this.mpc = response.data;
+        _this.mpc = response.data.data;
       })["catch"](function (err) {
         return console.error(err);
       })["finally"](function () {
@@ -6627,7 +6758,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "\n.sc-wrapper[data-v-3c008bbe] {\n    display: block;\n}\n.edit-container[data-v-3c008bbe] {\n    display: flex;\n    align-content: space-between;\n}\n/* .slider-preview {} */\n.slider-params[data-v-3c008bbe] {\n    flex: 2;\n}\n.image[data-v-3c008bbe] {\n    position: relative;\n    width: 194px;\n    height: 354px;\n    background-size: cover;\n    box-shadow: 0px 2px 50px rgba(14, 41, 60, 0.521569);\n    margin-right: 2em;\n}\n.caption[data-v-3c008bbe] {\n    position: absolute;\n    height: 25%;\n    background-color: #456789;\n    width: 100%;\n    left: 10%;\n    bottom: 35%;\n\n    color: white;\n    font-family: Hind;\n    font-style: normal;\n    font-weight: 500;\n    font-size: 22px;\n    line-height: 32px;\n    padding: 12px;\n}\n.button[data-v-3c008bbe] {\n    position: absolute;\n    bottom: 19%;\n    border: 3px solid #00E1C6;\n    height: 10%;\n    width: 60%;\n    left: 20%;\n    font-family: Hind;\n    font-style: normal;\n    font-weight: 600;\n    font-size: 18px;\n    line-height: 32px;\n    align-items: center;\n    text-align: center;\n    color: #FFFFFF;\n    cursor: pointer;\n}\n.button[data-v-3c008bbe]:hover {\n    background: linear-gradient(165.21deg, #00E1C6 0%, #19BBD5 100%);\n}\n.screen-wrapper[data-v-3c008bbe] {\n    height: 50vh;\n    background-color: gray;\n    position: relative;\n    margin: 15px 0;\n    box-shadow: inset 0px 0px 4px #000;\n}\n.page-preview[data-v-3c008bbe] {\n    height: 100%;\n    width: 80%;\n    background-color: #fff;\n    margin: 0 auto;\n    overflow: hidden;\n    border-top: 1px solid #adb5bd;\n    border-bottom: 1px solid #adb5bd;\n    display: flex;\n    align-items: center;\n    position: relative;\n}\n.screen-preview[data-v-3c008bbe] {\n    position: absolute;\n    background-size: cover;\n    background-color: rgba(14, 41, 60, 0.521569);\n    width: 80%;\n    height: 70%;\n    left: 10%;\n    top: 20%;\n    box-shadow: 0px 2px 50px rgba(14, 41, 60, 0.168627);\n    font-family: Hind;\n    font-style: normal;\n    font-weight: normal;\n    font-size: 14px;\n    line-height: 20px;\n    color: #ffffff;\n    padding: 15px;\n    text-shadow: 0px 0px 5px #000;\n}\n.screen-title[data-v-3c008bbe] {\n    position: absolute;\n    left: 12%;\n    top: 5%;\n    font-family: Hind;\n    font-style: normal;\n    font-weight: bold;\n    font-size: 28px;\n    line-height: 77px;\n    color: #0E293C;\n}\n", ""]);
+exports.push([module.i, "\n.sc-wrapper[data-v-3c008bbe] {\n    display: block;\n}\n.edit-container[data-v-3c008bbe] {\n    display: flex;\n    align-content: space-between;\n}\n/* .slider-preview {} */\n.slider-params[data-v-3c008bbe] {\n    flex: 2;\n}\n.image[data-v-3c008bbe] {\n    position: relative;\n    width: 222px;\n    height: 413px;\n    background-size: cover;\n    box-shadow: 0px 2px 50px rgba(14, 41, 60, 0.521569);\n    margin-right: 2em;\n}\n.caption[data-v-3c008bbe] {\n    position: absolute;\n    height: 25%;\n    background-color: #456789;\n    width: 100%;\n    left: 10%;\n    bottom: 35%;\n\n    color: white;\n    font-family: Hind;\n    font-style: normal;\n    font-weight: 500;\n    font-size: 22px;\n    line-height: 32px;\n    padding: 12px;\n}\n.button[data-v-3c008bbe] {\n    position: absolute;\n    bottom: 19%;\n    border: 3px solid #00E1C6;\n    height: 10%;\n    width: 60%;\n    left: 20%;\n    font-family: Hind;\n    font-style: normal;\n    font-weight: 600;\n    font-size: 18px;\n    line-height: 37px;\n    align-items: center;\n    text-align: center;\n    color: #FFFFFF;\n    cursor: pointer;\n}\n.button[data-v-3c008bbe]:hover {\n    background: linear-gradient(165.21deg, #00E1C6 0%, #19BBD5 100%);\n}\n.screen-wrapper[data-v-3c008bbe] {\n    height: 50vh;\n    background-color: gray;\n    position: relative;\n    margin: 15px 0;\n    box-shadow: inset 0px 0px 4px #000;\n}\n.page-preview[data-v-3c008bbe] {\n    height: 100%;\n    width: 80%;\n    background-color: #fff;\n    margin: 0 auto;\n    overflow: hidden;\n    border-top: 1px solid #adb5bd;\n    border-bottom: 1px solid #adb5bd;\n    display: flex;\n    align-items: center;\n    position: relative;\n}\n.screen-preview[data-v-3c008bbe] {\n    position: absolute;\n    background-size: cover;\n    background-color: rgba(14, 41, 60, 0.521569);\n    width: 80%;\n    height: 70%;\n    left: 10%;\n    top: 20%;\n    box-shadow: 0px 2px 50px rgba(14, 41, 60, 0.168627);\n    font-family: Hind;\n    font-style: normal;\n    font-weight: normal;\n    font-size: 14px;\n    line-height: 20px;\n    color: #ffffff;\n    padding: 15px;\n    text-shadow: 0px 0px 5px #000;\n}\n.screen-title[data-v-3c008bbe] {\n    position: absolute;\n    left: 12%;\n    top: 5%;\n    font-family: Hind;\n    font-style: normal;\n    font-weight: bold;\n    font-size: 28px;\n    line-height: 77px;\n    color: #0E293C;\n}\n", ""]);
 
 // exports
 
@@ -38150,7 +38281,13 @@ var render = function() {
     _c("div", { staticClass: "edit-container" }, [
       _c("div", { staticClass: "slider-preview" }, [
         _vm.loading
-          ? _c("div", [_vm._v("loading...")])
+          ? _c("div", { staticClass: "sc-wrapper" }, [
+              _c("div", { ref: "imagePreview", staticClass: "image" }, [
+                _c("div", { ref: "sliderCaption", staticClass: "caption" }),
+                _vm._v(" "),
+                _c("div", { staticClass: "button" }, [_vm._v("ZJISTIT VÍCE")])
+              ])
+            ])
           : _c("div", { staticClass: "sc-wrapper" }, [
               _c(
                 "div",
@@ -38158,7 +38295,7 @@ var render = function() {
                   ref: "imagePreview",
                   staticClass: "image",
                   style: {
-                    backgroundImage: "url(" + _vm.mpc.screen_image + ")"
+                    backgroundImage: "url(" + _vm.mpc.slider_image + ")"
                   }
                 },
                 [
@@ -38234,6 +38371,7 @@ var render = function() {
                     _vm._m(0),
                     _vm._v(" "),
                     _c("input", {
+                      ref: "captionColorInput",
                       staticClass: "form-control",
                       attrs: {
                         type: "text",
@@ -38252,6 +38390,7 @@ var render = function() {
                     _vm._m(1),
                     _vm._v(" "),
                     _c("input", {
+                      ref: "fontColorInput",
                       staticClass: "form-control",
                       attrs: {
                         type: "text",
@@ -38263,12 +38402,41 @@ var render = function() {
                   ])
                 ]),
                 _vm._v(" "),
-                _c("br")
+                _c("br"),
+                _vm._v(" "),
+                _c("div", {}, [
+                  _c(
+                    "button",
+                    {
+                      staticClass: "btn btn-success form-control",
+                      on: { click: _vm.saveComponent }
+                    },
+                    [_vm._v("Save")]
+                  )
+                ])
               ]),
               _vm._v(" "),
               _c("div", { staticClass: "col-9" }, [
                 _vm.loading
-                  ? _c("div", [_vm._v("loading...")])
+                  ? _c("div", [
+                      _c("label", [_vm._v("Title")]),
+                      _vm._v(" "),
+                      _c("input", {
+                        ref: "titleInput",
+                        staticClass: "form-control",
+                        attrs: { type: "text", name: "title" },
+                        on: { change: _vm.titleChange }
+                      }),
+                      _vm._v(" "),
+                      _c("label", [_vm._v("Description")]),
+                      _vm._v(" "),
+                      _c("textarea", {
+                        ref: "descriptionInput",
+                        staticClass: "form-control",
+                        attrs: { rows: "7" },
+                        on: { change: _vm.descriptionChange }
+                      })
+                    ])
                   : _c("div", {}, [
                       _c("label", [_vm._v("Title")]),
                       _vm._v(" "),
@@ -38302,7 +38470,13 @@ var render = function() {
     _vm._v(" "),
     _c("div", { staticClass: "container screen-wrapper" }, [
       _c("div", { staticClass: "page-preview" }, [
-        _vm.loading ? _c("div", [_vm._v("loading...")]) : _vm._e(),
+        _vm.loading
+          ? _c("div", { ref: "screenTitle", staticClass: "screen-title" })
+          : _vm._e(),
+        _vm._v(" "),
+        _vm.loading
+          ? _c("div", { ref: "screenPreview", staticClass: "screen-preview" })
+          : _vm._e(),
         _vm._v(" "),
         !_vm.loading
           ? _c("div", { ref: "screenTitle", staticClass: "screen-title" }, [
@@ -38313,16 +38487,82 @@ var render = function() {
           : _vm._e(),
         _vm._v(" "),
         !_vm.loading
-          ? _c("div", { ref: "screenPreview", staticClass: "screen-preview" }, [
-              _vm._v(
-                "\n                " +
-                  _vm._s(_vm.mpc.description) +
-                  "\n            "
-              )
-            ])
+          ? _c(
+              "div",
+              {
+                ref: "screenPreview",
+                staticClass: "screen-preview",
+                style: { backgroundImage: "url(" + _vm.mpc.screen_image + ")" }
+              },
+              [
+                _vm._v(
+                  "\n                " +
+                    _vm._s(_vm.mpc.description) +
+                    "\n            "
+                )
+              ]
+            )
           : _vm._e()
       ])
-    ])
+    ]),
+    _vm._v(" "),
+    _c(
+      "div",
+      {
+        ref: "errorModal",
+        staticClass: "modal fade",
+        attrs: {
+          tabindex: "-1",
+          role: "dialog",
+          "aria-labelledby": "exampleModalLabel",
+          "aria-hidden": "true"
+        }
+      },
+      [
+        _c(
+          "div",
+          { staticClass: "modal-dialog", attrs: { role: "document" } },
+          [
+            _c("div", { staticClass: "modal-content" }, [
+              _vm._m(2),
+              _vm._v(" "),
+              _c("div", { ref: "errorModalBody", staticClass: "modal-body" }),
+              _vm._v(" "),
+              _vm._m(3)
+            ])
+          ]
+        )
+      ]
+    ),
+    _vm._v(" "),
+    _c(
+      "div",
+      {
+        ref: "successModal",
+        staticClass: "modal fade",
+        attrs: {
+          tabindex: "-1",
+          role: "dialog",
+          "aria-labelledby": "exampleModalLabel",
+          "aria-hidden": "true"
+        }
+      },
+      [
+        _c(
+          "div",
+          { staticClass: "modal-dialog", attrs: { role: "document" } },
+          [
+            _c("div", { staticClass: "modal-content" }, [
+              _vm._m(4),
+              _vm._v(" "),
+              _c("div", { ref: "successModalBody", staticClass: "modal-body" }),
+              _vm._v(" "),
+              _vm._m(5)
+            ])
+          ]
+        )
+      ]
+    )
   ])
 }
 var staticRenderFns = [
@@ -38340,6 +38580,86 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c("div", { staticClass: "input-group-prepend" }, [
       _c("div", { staticClass: "input-group-text" }, [_vm._v("Font color")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "modal-header" }, [
+      _c(
+        "h5",
+        { staticClass: "modal-title", attrs: { id: "exampleModalLabel" } },
+        [_vm._v("Oooops!")]
+      ),
+      _vm._v(" "),
+      _c(
+        "button",
+        {
+          staticClass: "close",
+          attrs: {
+            type: "button",
+            "data-dismiss": "modal",
+            "aria-label": "Close"
+          }
+        },
+        [_c("span", { attrs: { "aria-hidden": "true" } }, [_vm._v("×")])]
+      )
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "modal-footer" }, [
+      _c(
+        "button",
+        {
+          staticClass: "btn btn-secondary",
+          attrs: { type: "button", "data-dismiss": "modal" }
+        },
+        [_vm._v("Close")]
+      )
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "modal-header" }, [
+      _c(
+        "h5",
+        { staticClass: "modal-title", attrs: { id: "exampleModalLabel" } },
+        [_vm._v("Lovely success message!")]
+      ),
+      _vm._v(" "),
+      _c(
+        "button",
+        {
+          staticClass: "close",
+          attrs: {
+            type: "button",
+            "data-dismiss": "modal",
+            "aria-label": "Close"
+          }
+        },
+        [_c("span", { attrs: { "aria-hidden": "true" } }, [_vm._v("×")])]
+      )
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "modal-footer" }, [
+      _c(
+        "button",
+        {
+          staticClass: "btn btn-secondary",
+          attrs: { type: "button", "data-dismiss": "modal" }
+        },
+        [_vm._v("Close")]
+      )
     ])
   }
 ]

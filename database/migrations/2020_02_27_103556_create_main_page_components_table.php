@@ -17,6 +17,8 @@ class CreateMainPageComponentsTable extends Migration
             $table->bigIncrements('id');
             $table->string('title');
             $table->string('description');
+            $table->string('caption_color');
+            $table->string('font_color');
             $table->string('screen_image')->nullable();
             $table->string('slider_image')->nullable();
             $table->timestamps();

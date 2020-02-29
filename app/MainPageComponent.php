@@ -9,6 +9,7 @@ class MainPageComponent extends Model
     protected $fillable = [
         'title',
         'description',
-        'screen_image'
+        'caption_color',
+        'font_color'
     ];
 }

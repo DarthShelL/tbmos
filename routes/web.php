@@ -12,10 +12,10 @@
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('main');
 });
 
-Auth::routes();
+Auth::routes(['register' => false]);
 
 Route::post('/api/mpc', 'MainPageComponentController@api')->name('mpc_api');
 

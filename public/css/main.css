@@ -1,0 +1,24 @@
+section.screen {
+    height: 100vh;
+    position: relative;
+}
+
+.header-screen {
+    background-color: paleturquoise;
+}
+
+section.screen:nth-child(2) {
+    background-color: purple;
+}
+
+section.screen:nth-child(3) {
+    background-color: seagreen;
+}
+
+section.screen:nth-child(4) {
+    background-color: tomato;
+}
+
+section.screen:nth-child(5) {
+    background-color: steelblue;
+}

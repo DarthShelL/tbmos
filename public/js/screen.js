@@ -95,16 +95,124 @@
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var DSScreen = function DSScreen() {
-  _classCallCheck(this, DSScreen);
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
 
-  // find all screen sections
-  this.screens = document.querySelectorAll('section.screen');
-  console.log(this.screens);
-};
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+var DSScreen = /*#__PURE__*/function () {
+  function DSScreen() {
+    _classCallCheck(this, DSScreen);
+
+    this.moving = false;
+    this.touchStartY = null; // stasis body
+
+    document.body.style.overflow = 'hidden';
+    document.body.style.height = '100vh'; // wrapper
+
+    this.screenWrapper = document.querySelector('.screen-wrapper');
+    this.screenWrapper.style.transition = 'margin-top .5s ease-in'; // find all screen sections
+
+    this.currentScreen = 1;
+    this.screens = document.querySelectorAll('section.screen');
+    console.log(this.screens); // scroll controll
+
+    document.addEventListener("wheel", this.wheelHandler.bind(this), {
+      passive: false
+    });
+    document.addEventListener("touchstart", this.touchStartHandler.bind(this), {
+      passive: false
+    });
+    document.addEventListener("touchmove", this.touchMoveHandler.bind(this), {
+      passive: false
+    });
+    document.addEventListener("touchend", this.touchEndHandler.bind(this), {
+      passive: false
+    });
+  }
+
+  _createClass(DSScreen, [{
+    key: "touchStartHandler",
+    value: function touchStartHandler(e) {
+      e.preventDefault();
+      this.touchStartY = e.changedTouches[0].screenY;
+    }
+  }, {
+    key: "touchMoveHandler",
+    value: function touchMoveHandler(e) {
+      e.preventDefault();
+      if (!this.touchStartY) return;
+      var currentTouchY = e.changedTouches[0].screenY;
+
+      if (currentTouchY > this.touchStartY) {
+        this.swipeDirection = -1;
+      } else {
+        this.swipeDirection = 1;
+      }
+    }
+  }, {
+    key: "touchEndHandler",
+    value: function touchEndHandler(e) {
+      e.preventDefault();
+      if (!this.swipeDirection) return;
+
+      if (this.swipeDirection > 0) {
+        this.nextScreen();
+      } else {
+        this.prevScreen();
+      }
+
+      this.touchStartY = null;
+      this.swipeDirection = null;
+    }
+  }, {
+    key: "wheelHandler",
+    value: function wheelHandler(e) {
+      e.preventDefault();
+      if (this.moving) return;
+
+      if (e.deltaY > 0) {
+        this.nextScreen();
+      } else {
+        this.prevScreen();
+      }
+    }
+  }, {
+    key: "nextScreen",
+    value: function nextScreen() {
+      var maxScreens = this.screens.length;
+
+      if (this.currentScreen < maxScreens) {
+        this.currentScreen++;
+        this.updateScreen();
+      }
+    }
+  }, {
+    key: "prevScreen",
+    value: function prevScreen() {
+      var maxScreens = this.screens.length;
+
+      if (this.currentScreen > 1) {
+        this.currentScreen--;
+        this.updateScreen();
+      }
+    }
+  }, {
+    key: "updateScreen",
+    value: function updateScreen() {
+      this.moving = true;
+      setTimeout(function () {
+        this.moving = false;
+      }.bind(this), 500);
+      var marginTop = (this.currentScreen - 1) * -100;
+      this.screenWrapper.style.marginTop = marginTop + 'vh';
+    }
+  }]);
+
+  return DSScreen;
+}();
 
 document.addEventListener("DOMContentLoaded", function () {
-  var screen = new DSScreen();
+  window.DSSC = new DSScreen();
 });
 
 /***/ }),

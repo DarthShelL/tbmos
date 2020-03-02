@@ -9,21 +9,23 @@
 @endpush
 
 @section('content')
-    <section class="screen header-screen">
-        <div class="container" id="app">
-            header screen
-        </div>
-    </section>
-    <section class="screen">
-        <div class="container"></div>
-    </section>
-    <section class="screen">
-        <div class="container"></div>
-    </section>
-    <section class="screen">
-        <div class="container"></div>
-    </section>
-    <section class="screen">
-        <div class="container"></div>
-    </section>
+    <div class="screen-wrapper">
+        <section class="screen header-screen">
+            <div class="container" id="app">
+                header screen
+            </div>
+        </section>
+        <section class="screen">
+            <div class="container"></div>
+        </section>
+        <section class="screen">
+            <div class="container"></div>
+        </section>
+        <section class="screen">
+            <div class="container"></div>
+        </section>
+        <section class="screen">
+            <div class="container"></div>
+        </section>
+    </div>
 @endsection

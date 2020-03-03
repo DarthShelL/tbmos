@@ -22,3 +22,14 @@ section.screen:nth-child(4) {
 section.screen:nth-child(5) {
     background-color: steelblue;
 }
+
+.header-bg {
+    height: 50vh;
+    background-image: url('/BG-first floor.png');
+    background-size: cover;
+    background-position: right bottom;
+}
+
+.slider-section {
+    height: 50vh;
+}

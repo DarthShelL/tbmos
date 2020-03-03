@@ -11,9 +11,11 @@
 @section('content')
     <div class="screen-wrapper">
         <section class="screen header-screen">
-            <div class="container" id="app">
-                header screen
+            <div class="header-bg">
+                <div class="container"></div>
             </div>
+            <div class="slider-section"></div>
+            <div id="app"></div>
         </section>
         <section class="screen">
             <div class="container"></div>

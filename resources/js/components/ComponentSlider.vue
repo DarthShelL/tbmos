@@ -111,6 +111,12 @@ export default {
             })
         },
         unsetSliderActions() {
+            if (this.slider == false)
+                return
+
+            this.currentStep = 0
+            this.updateSlide()
+
             const la = this.$refs.leftArrow
             const ra = this.$refs.rightArrow
 

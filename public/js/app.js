@@ -2022,6 +2022,9 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     unsetSliderActions: function unsetSliderActions() {
+      if (this.slider == false) return;
+      this.currentStep = 0;
+      this.updateSlide();
       var la = this.$refs.leftArrow;
       var ra = this.$refs.rightArrow;
       la.removeEventListener('click', this.prevSlide.bind(this));

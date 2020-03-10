@@ -26,6 +26,8 @@ class DSScreen {
     touchStartHandler(e) {
         if (e.target.classList.contains('navbar-toggler-icon'))
             return
+        if (e.target.classList.contains('button'))
+            return
         e.preventDefault()
         this.touchStartY = e.changedTouches[0].screenY
     }
@@ -42,6 +44,8 @@ class DSScreen {
     }
     touchEndHandler(e) {
         if (e.target.classList.contains('navbar-toggler-icon'))
+            return
+        if (e.target.classList.contains('button'))
             return
         e.preventDefault()
         if (!this.swipeDirection)
@@ -80,7 +84,13 @@ class DSScreen {
             this.updateScreen()
         }
     }
+    goto(screen) {
+        this.currentScreen = screen
+        this.updateScreen()
+    }
     updateScreen() {
+        if (this.moving)
+            return
         this.moving = true
         setTimeout((function(){
             this.moving = false

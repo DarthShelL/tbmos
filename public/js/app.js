@@ -1919,6 +1919,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   mounted: function mounted() {
     this.read();
@@ -1933,37 +1935,26 @@ __webpack_require__.r(__webpack_exports__);
   methods: {
     calculateDimension: function calculateDimension() {
       //get content width and height
-      var sliderWrapper = document.querySelector('.slider-wrapper');
-      var wrapperWidth = parseInt(getComputedStyle(sliderWrapper, null).width);
-      var wrapperHeight = parseInt(getComputedStyle(sliderWrapper, null).height); //calculate component width and height
+      var wrapperWidth = parseInt(getComputedStyle(this.$refs.sliderWrapper, null).width);
+      var wrapperHeight = parseInt(getComputedStyle(this.$refs.sliderWrapper, null).height); //calculate component width and height
 
       var componentHeight = wrapperHeight;
-      var componentWidth = Math.round(componentHeight / this.ratio); //set component's dimensions
+      var componentWidth = Math.round(componentHeight / this.ratio); //set component dimensions
 
-      componentImages = this.$refs.sliderWrapper.querySelectorAll('.image');
-      var _iteratorNormalCompletion = true;
-      var _didIteratorError = false;
-      var _iteratorError = undefined;
+      var componentImages = this.$refs.sliderWrapper.querySelectorAll('div.image');
 
-      try {
-        for (var _iterator = componentImages[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-          var image = _step.value;
-          image.style.width = componentWidth + 'px';
-          image.style.height = componentHeight + 'px';
-        }
-      } catch (err) {
-        _didIteratorError = true;
-        _iteratorError = err;
-      } finally {
-        try {
-          if (!_iteratorNormalCompletion && _iterator["return"] != null) {
-            _iterator["return"]();
-          }
-        } finally {
-          if (_didIteratorError) {
-            throw _iteratorError;
-          }
-        }
+      var _loop = function _loop(i) {
+        componentImages[i].style.width = componentWidth + 'px';
+        componentImages[i].style.height = componentHeight + 'px';
+        var btn = componentImages[i].querySelector('.button');
+        btn.style.lineHeight = parseInt(getComputedStyle(btn, null).height) - 6 + 'px';
+        btn.addEventListener('click', function (e) {
+          window.DSSC["goto"](i + 2);
+        });
+      };
+
+      for (var i = 0; i < componentImages.length; i++) {
+        _loop(i);
       }
     },
     read: function read() {
@@ -1973,11 +1964,14 @@ __webpack_require__.r(__webpack_exports__);
       axios.post('/api/mpc', {
         method: 'getMPCs'
       }).then(function (response) {
-        _this.mpcs = response.data.data; // this.calculateDimension()
+        _this.mpcs = response.data.data;
       })["catch"](function (err) {
         return console.error(err);
       })["finally"](function () {
-        _this.loading = false; // this.calculateDimension()
+        self.loading = false;
+        self.$nextTick(function () {
+          self.calculateDimension();
+        });
       });
     }
   }
@@ -6844,7 +6838,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "\n.slider-wrapper[data-v-1795cda3] {\n    height: 40vh;\n    margin: 5vh 0;\n}\n.sc-wrapper[data-v-1795cda3] {\n    width: -webkit-fit-content;\n    width: -moz-fit-content;\n    width: fit-content;\n}\n.image[data-v-1795cda3] {\n    position: relative;\n    width: 222px;\n    height: 413px;\n    background-size: cover;\n    box-shadow: 0px 2px 50px rgba(14, 41, 60, 0.521569);\n    margin-right: 2em;\n}\n.caption[data-v-1795cda3] {\n    position: absolute;\n    height: 25%;\n    background-color: #456789;\n    width: 100%;\n    left: 10%;\n    bottom: 35%;\n\n    color: white;\n    font-family: Hind;\n    font-style: normal;\n    font-weight: 500;\n    font-size: 22px;\n    line-height: 32px;\n    padding: 12px;\n}\n.button[data-v-1795cda3] {\n    position: absolute;\n    bottom: 19%;\n    border: 3px solid #00E1C6;\n    height: 10%;\n    width: 60%;\n    left: 20%;\n    font-family: Hind;\n    font-style: normal;\n    font-weight: 600;\n    font-size: 18px;\n    line-height: 37px;\n    align-items: center;\n    text-align: center;\n    color: #FFFFFF;\n    cursor: pointer;\n}\n.button[data-v-1795cda3]:hover {\n    background: linear-gradient(165.21deg, #00E1C6 0%, #19BBD5 100%);\n}\n", ""]);
+exports.push([module.i, "\n.slider-wrapper[data-v-1795cda3] {\n    height: 40vh;\n    margin: 5vh 0;\n    /* overflow: hidden; */\n}\n.slider-inner[data-v-1795cda3] {\n    display: flex;\n}\n/* .slider-inner::after {\n    content: \"\";\n    display: block;\n    clear: both;\n} */\n.sc-wrapper[data-v-1795cda3] {\n    /* float: left; */\n    flex: auto;\n}\n.image[data-v-1795cda3] {\n    position: relative;\n    width: 222px;\n    height: 413px;\n    background-size: cover;\n    box-shadow: 0px 2px 50px rgba(14, 41, 60, 0.521569);\n    /* margin-right: 2em; */\n    margin: 0 auto;\n}\n.caption[data-v-1795cda3] {\n    position: absolute;\n    height: 25%;\n    background-color: #456789;\n    width: 100%;\n    left: 10%;\n    bottom: 35%;\n\n    color: white;\n    font-family: Hind;\n    font-style: normal;\n    font-weight: 500;\n    font-size: 22px;\n    line-height: 32px;\n    padding: 12px;\n}\n.button[data-v-1795cda3] {\n    position: absolute;\n    bottom: 19%;\n    border: 3px solid #00E1C6;\n    height: 10%;\n    width: 60%;\n    left: 20%;\n    font-family: Hind;\n    font-style: normal;\n    font-weight: 600;\n    font-size: 80%;\n    line-height: 180%;\n    align-items: center;\n    text-align: center;\n    color: #FFFFFF;\n    cursor: pointer;\n}\n.button[data-v-1795cda3]:hover {\n    background: linear-gradient(165.21deg, #00E1C6 0%, #19BBD5 100%);\n}\n", ""]);
 
 // exports
 
@@ -38366,33 +38360,31 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return !_vm.loading
-    ? _c(
-        "div",
-        {
-          ref: "sliderWrapper",
-          staticClass: "slider-wrapper",
-          on: { click: _vm.calculateDimension }
-        },
-        _vm._l(_vm.mpcs, function(mpc) {
-          return _c("div", { staticClass: "sc-wrapper" }, [
-            _c(
-              "div",
-              {
-                staticClass: "image",
-                style: { backgroundImage: "url(" + mpc.slider_image + ")" }
-              },
-              [
-                _c("div", { staticClass: "caption" }, [
-                  _vm._v(_vm._s(mpc.title))
-                ]),
-                _vm._v(" "),
-                _c("div", { staticClass: "button" }, [_vm._v("ZJISTIT VÍCE")])
-              ]
-            )
-          ])
-        }),
-        0
-      )
+    ? _c("div", { ref: "sliderWrapper", staticClass: "slider-wrapper" }, [
+        _c(
+          "div",
+          { staticClass: "slider-inner" },
+          _vm._l(_vm.mpcs, function(mpc) {
+            return _c("div", { staticClass: "sc-wrapper" }, [
+              _c(
+                "div",
+                {
+                  staticClass: "image",
+                  style: { backgroundImage: "url(" + mpc.slider_image + ")" }
+                },
+                [
+                  _c("div", { staticClass: "caption" }, [
+                    _vm._v(_vm._s(mpc.title))
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "button" }, [_vm._v("ZJISTIT VÍCE")])
+                ]
+              )
+            ])
+          }),
+          0
+        )
+      ])
     : _vm._e()
 }
 var staticRenderFns = []

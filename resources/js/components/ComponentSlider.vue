@@ -1,9 +1,11 @@
 <template>
-    <div v-if="!loading" @click="calculateDimension" class="slider-wrapper" ref="sliderWrapper">
-        <div v-for="mpc in mpcs" class="sc-wrapper">
-            <div class="image" v-bind:style="{ backgroundImage: 'url(' + mpc.slider_image + ')' }">
-                <div class="caption">{{mpc.title}}</div>
-                <div class="button">ZJISTIT VÍCE</div>
+    <div v-if="!loading" class="slider-wrapper" ref="sliderWrapper">
+        <div class="slider-inner">
+            <div v-for="mpc in mpcs" class="sc-wrapper">
+                <div class="image" v-bind:style="{ backgroundImage: 'url(' + mpc.slider_image + ')' }">
+                    <div class="caption">{{mpc.title}}</div>
+                    <div class="button">ZJISTIT VÍCE</div>
+                </div>
             </div>
         </div>
     </div>
@@ -24,32 +26,37 @@ export default {
     methods: {
         calculateDimension() {
             //get content width and height
-            const sliderWrapper = document.querySelector('.slider-wrapper')
-            const wrapperWidth = parseInt(getComputedStyle(sliderWrapper, null).width)
-            const wrapperHeight = parseInt(getComputedStyle(sliderWrapper, null).height)
+            const wrapperWidth = parseInt(getComputedStyle(this.$refs.sliderWrapper, null).width)
+            const wrapperHeight = parseInt(getComputedStyle(this.$refs.sliderWrapper, null).height)
 
             //calculate component width and height
             const componentHeight = wrapperHeight
             const componentWidth = Math.round(componentHeight/this.ratio)
 
-            //set component's dimensions
-            componentImages = this.$refs.sliderWrapper.querySelectorAll('.image')
+            //set component dimensions
+            const componentImages = this.$refs.sliderWrapper.querySelectorAll('div.image')
 
-            for (const image of componentImages) {
-                image.style.width = componentWidth + 'px'
-                image.style.height = componentHeight + 'px'
+            for (let i=0; i < componentImages.length; i++) {
+                componentImages[i].style.width = componentWidth + 'px'
+                componentImages[i].style.height = componentHeight + 'px'
+                const btn = componentImages[i].querySelector('.button');
+                btn.style.lineHeight = (parseInt(getComputedStyle(btn, null).height) - 6) + 'px'
+                btn.addEventListener('click', function(e){
+                    window.DSSC.goto(i+2)
+                })
             }
         },
         read() {
             const self = this
             axios.post('/api/mpc', {method:'getMPCs'}).then((response) => {
                 this.mpcs = response.data.data
-                // this.calculateDimension()
             })
             .catch(err => console.error(err))
             .finally(() => {
-                this.loading = false
-                // this.calculateDimension()
+                self.loading = false
+                self.$nextTick(function(){
+                    self.calculateDimension()
+                })
             })
         }
     }
@@ -60,9 +67,19 @@ export default {
 .slider-wrapper {
     height: 40vh;
     margin: 5vh 0;
+    /* overflow: hidden; */
 }
+.slider-inner {
+    display: flex;
+}
+/* .slider-inner::after {
+    content: "";
+    display: block;
+    clear: both;
+} */
 .sc-wrapper {
-    width: fit-content;
+    /* float: left; */
+    flex: auto;
 }
 .image {
     position: relative;
@@ -70,7 +87,8 @@ export default {
     height: 413px;
     background-size: cover;
     box-shadow: 0px 2px 50px rgba(14, 41, 60, 0.521569);
-    margin-right: 2em;
+    /* margin-right: 2em; */
+    margin: 0 auto;
 }
 .caption {
     position: absolute;
@@ -98,8 +116,8 @@ export default {
     font-family: Hind;
     font-style: normal;
     font-weight: 600;
-    font-size: 18px;
-    line-height: 37px;
+    font-size: 80%;
+    line-height: 180%;
     align-items: center;
     text-align: center;
     color: #FFFFFF;

@@ -134,6 +134,7 @@ var DSScreen = /*#__PURE__*/function () {
     key: "touchStartHandler",
     value: function touchStartHandler(e) {
       if (e.target.classList.contains('navbar-toggler-icon')) return;
+      if (e.target.classList.contains('button')) return;
       e.preventDefault();
       this.touchStartY = e.changedTouches[0].screenY;
     }
@@ -154,6 +155,7 @@ var DSScreen = /*#__PURE__*/function () {
     key: "touchEndHandler",
     value: function touchEndHandler(e) {
       if (e.target.classList.contains('navbar-toggler-icon')) return;
+      if (e.target.classList.contains('button')) return;
       e.preventDefault();
       if (!this.swipeDirection) return;
 
@@ -199,8 +201,15 @@ var DSScreen = /*#__PURE__*/function () {
       }
     }
   }, {
+    key: "goto",
+    value: function goto(screen) {
+      this.currentScreen = screen;
+      this.updateScreen();
+    }
+  }, {
     key: "updateScreen",
     value: function updateScreen() {
+      if (this.moving) return;
       this.moving = true;
       setTimeout(function () {
         this.moving = false;

@@ -110,7 +110,7 @@ var DSScreen = /*#__PURE__*/function () {
     document.body.style.height = '100vh'; // wrapper
 
     this.screenWrapper = document.querySelector('.screen-wrapper');
-    this.screenWrapper.style.transition = 'margin-top .5s ease-in'; // find all screen sections
+    this.screenWrapper.style.transition = 'margin-top .5s ease-in-out'; // find all screen sections
 
     this.currentScreen = 1;
     this.screens = document.querySelectorAll('section.screen'); // scroll controll
@@ -135,6 +135,8 @@ var DSScreen = /*#__PURE__*/function () {
     value: function touchStartHandler(e) {
       if (e.target.classList.contains('navbar-toggler-icon')) return;
       if (e.target.classList.contains('button')) return;
+      if (e.target.classList.contains('slider-arrow-left')) return;
+      if (e.target.classList.contains('slider-arrow-right')) return;
       e.preventDefault();
       this.touchStartY = e.changedTouches[0].screenY;
     }
@@ -156,6 +158,8 @@ var DSScreen = /*#__PURE__*/function () {
     value: function touchEndHandler(e) {
       if (e.target.classList.contains('navbar-toggler-icon')) return;
       if (e.target.classList.contains('button')) return;
+      if (e.target.classList.contains('slider-arrow-left')) return;
+      if (e.target.classList.contains('slider-arrow-right')) return;
       e.preventDefault();
       if (!this.swipeDirection) return;
 

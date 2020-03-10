@@ -1921,39 +1921,71 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   mounted: function mounted() {
     this.read();
+    window.addEventListener('resize', function () {
+      if (this.loading) return;
+      this.calculateDimension();
+    }.bind(this));
   },
   data: function data() {
     return {
       mpcs: null,
       loading: true,
-      ratio: 1.8
+      slider: false,
+      ratio: 1.8,
+      maxSteps: null,
+      currentStep: 0,
+      stepSize: null
     };
   },
   methods: {
     calculateDimension: function calculateDimension() {
       //get content width and height
       var wrapperWidth = parseInt(getComputedStyle(this.$refs.sliderWrapper, null).width);
-      var wrapperHeight = parseInt(getComputedStyle(this.$refs.sliderWrapper, null).height); //calculate component width and height
+      var wrapperHeight = parseInt(getComputedStyle(this.$refs.sliderWrapper, null).height);
+      var innerHeight = parseInt(getComputedStyle(this.$refs.sliderInner, null).height); //calculate component width and height
 
-      var componentHeight = wrapperHeight;
-      var componentWidth = Math.round(componentHeight / this.ratio); //set component dimensions
+      var componentHeight = innerHeight;
+      var imageWidth = Math.floor(componentHeight / this.ratio);
+      var margin = 50; //set component dimensions
 
-      var componentImages = this.$refs.sliderWrapper.querySelectorAll('div.image');
+      var components = this.$refs.sliderWrapper.querySelectorAll('div.sc-wrapper'); //calc number of displaying components
+
+      var displayingNumber = Math.floor(wrapperWidth / (imageWidth + margin));
+
+      if (displayingNumber >= components.length) {
+        displayingNumber = components.length;
+        this.disableSlider();
+      } else {
+        this.maxSteps = components.length - displayingNumber;
+        this.currentStep = 0;
+        this.stepSize = Math.round(wrapperWidth / displayingNumber);
+        this.enableSlider();
+      } //calc dimensions from components number
+
+
+      var componentWidth = Math.round(wrapperWidth / displayingNumber); //set slider inner width
+
+      var innerCalculatedWidth = componentWidth * components.length;
+      this.$refs.sliderInner.style.width = innerCalculatedWidth + 'px';
 
       var _loop = function _loop(i) {
-        componentImages[i].style.width = componentWidth + 'px';
-        componentImages[i].style.height = componentHeight + 'px';
-        var btn = componentImages[i].querySelector('.button');
+        components[i].style.width = componentWidth + 'px';
+        var image = components[i].querySelector('.image');
+        image.style.width = imageWidth + 'px';
+        image.style.height = componentHeight + 'px';
+        var btn = image.querySelector('.button');
         btn.style.lineHeight = parseInt(getComputedStyle(btn, null).height) - 6 + 'px';
         btn.addEventListener('click', function (e) {
           window.DSSC["goto"](i + 2);
         });
       };
 
-      for (var i = 0; i < componentImages.length; i++) {
+      for (var i = 0; i < components.length; i++) {
         _loop(i);
       }
     },
@@ -1973,6 +2005,48 @@ __webpack_require__.r(__webpack_exports__);
           self.calculateDimension();
         });
       });
+    },
+    enableSlider: function enableSlider() {
+      this.slider = true;
+      this.setSliderActions();
+    },
+    disableSlider: function disableSlider() {
+      this.unsetSliderActions();
+    },
+    setSliderActions: function setSliderActions() {
+      this.$nextTick(function () {
+        var la = this.$refs.leftArrow;
+        var ra = this.$refs.rightArrow;
+        la.addEventListener('click', this.prevSlide.bind(this));
+        ra.addEventListener('click', this.nextSlide.bind(this));
+      });
+    },
+    unsetSliderActions: function unsetSliderActions() {
+      var la = this.$refs.leftArrow;
+      var ra = this.$refs.rightArrow;
+      la.removeEventListener('click', this.prevSlide.bind(this));
+      ra.removeEventListener('click', this.nextSlide.bind(this));
+      this.slider = false;
+    },
+    nextSlide: function nextSlide() {
+      console.log('right');
+
+      if (this.currentStep < this.maxSteps) {
+        this.currentStep++;
+        this.updateSlide();
+      }
+    },
+    prevSlide: function prevSlide() {
+      console.log('left');
+
+      if (this.currentStep > 0) {
+        this.currentStep--;
+        this.updateSlide();
+      }
+    },
+    updateSlide: function updateSlide() {
+      console.table(this.currentStep, this.stepSize, this.maxSteps);
+      this.$refs.sliderInner.style.marginLeft = -(this.currentStep * this.stepSize) + 'px';
     }
   }
 });
@@ -6838,7 +6912,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "\n.slider-wrapper[data-v-1795cda3] {\n    height: 40vh;\n    margin: 5vh 0;\n    /* overflow: hidden; */\n}\n.slider-inner[data-v-1795cda3] {\n    display: flex;\n}\n/* .slider-inner::after {\n    content: \"\";\n    display: block;\n    clear: both;\n} */\n.sc-wrapper[data-v-1795cda3] {\n    /* float: left; */\n    flex: auto;\n}\n.image[data-v-1795cda3] {\n    position: relative;\n    width: 222px;\n    height: 413px;\n    background-size: cover;\n    box-shadow: 0px 2px 50px rgba(14, 41, 60, 0.521569);\n    /* margin-right: 2em; */\n    margin: 0 auto;\n}\n.caption[data-v-1795cda3] {\n    position: absolute;\n    height: 25%;\n    background-color: #456789;\n    width: 100%;\n    left: 10%;\n    bottom: 35%;\n\n    color: white;\n    font-family: Hind;\n    font-style: normal;\n    font-weight: 500;\n    font-size: 22px;\n    line-height: 32px;\n    padding: 12px;\n}\n.button[data-v-1795cda3] {\n    position: absolute;\n    bottom: 19%;\n    border: 3px solid #00E1C6;\n    height: 10%;\n    width: 60%;\n    left: 20%;\n    font-family: Hind;\n    font-style: normal;\n    font-weight: 600;\n    font-size: 80%;\n    line-height: 180%;\n    align-items: center;\n    text-align: center;\n    color: #FFFFFF;\n    cursor: pointer;\n}\n.button[data-v-1795cda3]:hover {\n    background: linear-gradient(165.21deg, #00E1C6 0%, #19BBD5 100%);\n}\n", ""]);
+exports.push([module.i, "\n.slider-wrapper[data-v-1795cda3] {\n    height: 50vh;\n    overflow: hidden;\n    position: relative;\n}\n.slider-inner[data-v-1795cda3] {\n    margin: 5vh 0;\n    height: 40vh;\n    transition: margin-left .5s ease-in-out;\n}\n.slider-inner[data-v-1795cda3]::after {\n    content: \"\";\n    display: block;\n    clear: both;\n}\n.sc-wrapper[data-v-1795cda3] {\n    float: left;\n}\n.image[data-v-1795cda3] {\n    position: relative;\n    width: 222px;\n    height: 413px;\n    background-size: cover;\n    box-shadow: 0px 2px 25px rgba(14, 41, 60, 0.521569);\n    /* margin-right: 2em; */\n    margin: 0 auto;\n}\n.caption[data-v-1795cda3] {\n    position: absolute;\n    height: 25%;\n    background-color: #456789;\n    width: 100%;\n    left: 10%;\n    bottom: 35%;\n\n    color: white;\n    font-family: Hind;\n    font-style: normal;\n    font-weight: 500;\n    font-size: 100%;\n    line-height: 1.5em;\n    padding: 12px;\n}\n.button[data-v-1795cda3] {\n    position: absolute;\n    bottom: 19%;\n    border: 3px solid #00E1C6;\n    height: 10%;\n    width: 60%;\n    left: 20%;\n    font-family: Hind;\n    font-style: normal;\n    font-weight: 600;\n    font-size: 80%;\n    line-height: 180%;\n    align-items: center;\n    text-align: center;\n    color: #FFFFFF;\n    cursor: pointer;\n}\n.button[data-v-1795cda3]:hover {\n    background: linear-gradient(165.21deg, #00E1C6 0%, #19BBD5 100%);\n}\n.slider-arrow-left[data-v-1795cda3] {\n    position: absolute;\n    width: 50px;\n    height: 100%;\n    background-image: url(\"/slider-arrow-left.svg\");\n    background-size: contain;\n    background-repeat: no-repeat;\n    background-position: center;\n    cursor: pointer;\n    z-index: 9999;\n}\n.slider-arrow-right[data-v-1795cda3] {\n    position: absolute;\n    width: 50px;\n    height: 100%;\n    right: 0;\n    background-image: url(\"/slider-arrow-right.svg\");\n    background-size: contain;\n    background-repeat: no-repeat;\n    background-position: center;\n    cursor: pointer;\n    z-index: 9999;\n}\n.svg-bg[data-v-1795cda3] {\n    width: inherit;\n    height: inherit;\n}\n", ""]);
 
 // exports
 
@@ -38361,9 +38435,17 @@ var render = function() {
   var _c = _vm._self._c || _h
   return !_vm.loading
     ? _c("div", { ref: "sliderWrapper", staticClass: "slider-wrapper" }, [
+        _vm.slider
+          ? _c("div", { ref: "leftArrow", staticClass: "slider-arrow-left" })
+          : _vm._e(),
+        _vm._v(" "),
+        _vm.slider
+          ? _c("div", { ref: "rightArrow", staticClass: "slider-arrow-right" })
+          : _vm._e(),
+        _vm._v(" "),
         _c(
           "div",
-          { staticClass: "slider-inner" },
+          { ref: "sliderInner", staticClass: "slider-inner" },
           _vm._l(_vm.mpcs, function(mpc) {
             return _c("div", { staticClass: "sc-wrapper" }, [
               _c(
@@ -38373,9 +38455,14 @@ var render = function() {
                   style: { backgroundImage: "url(" + mpc.slider_image + ")" }
                 },
                 [
-                  _c("div", { staticClass: "caption" }, [
-                    _vm._v(_vm._s(mpc.title))
-                  ]),
+                  _c(
+                    "div",
+                    {
+                      staticClass: "caption",
+                      style: { backgroundColor: mpc.caption_color }
+                    },
+                    [_vm._v(_vm._s(mpc.title))]
+                  ),
                   _vm._v(" "),
                   _c("div", { staticClass: "button" }, [_vm._v("ZJISTIT VÍCE")])
                 ]

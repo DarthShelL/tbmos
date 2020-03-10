@@ -9,7 +9,7 @@ class DSScreen {
 
         // wrapper
         this.screenWrapper = document.querySelector('.screen-wrapper')
-        this.screenWrapper.style.transition = 'margin-top .5s ease-in'
+        this.screenWrapper.style.transition = 'margin-top .5s ease-in-out'
 
         // find all screen sections
         this.currentScreen = 1
@@ -27,6 +27,10 @@ class DSScreen {
         if (e.target.classList.contains('navbar-toggler-icon'))
             return
         if (e.target.classList.contains('button'))
+            return
+        if (e.target.classList.contains('slider-arrow-left'))
+            return
+        if (e.target.classList.contains('slider-arrow-right'))
             return
         e.preventDefault()
         this.touchStartY = e.changedTouches[0].screenY
@@ -46,6 +50,10 @@ class DSScreen {
         if (e.target.classList.contains('navbar-toggler-icon'))
             return
         if (e.target.classList.contains('button'))
+            return
+        if (e.target.classList.contains('slider-arrow-left'))
+        return
+        if (e.target.classList.contains('slider-arrow-right'))
             return
         e.preventDefault()
         if (!this.swipeDirection)

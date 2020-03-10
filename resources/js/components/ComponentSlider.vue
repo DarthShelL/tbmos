@@ -1,9 +1,11 @@
 <template>
     <div v-if="!loading" class="slider-wrapper" ref="sliderWrapper">
-        <div class="slider-inner">
+        <div v-if="slider" class="slider-arrow-left" ref="leftArrow"></div>
+        <div v-if="slider" class="slider-arrow-right" ref="rightArrow"></div>
+        <div class="slider-inner" ref="sliderInner">
             <div v-for="mpc in mpcs" class="sc-wrapper">
                 <div class="image" v-bind:style="{ backgroundImage: 'url(' + mpc.slider_image + ')' }">
-                    <div class="caption">{{mpc.title}}</div>
+                    <div class="caption" v-bind:style="{ backgroundColor: mpc.caption_color }">{{mpc.title}}</div>
                     <div class="button">ZJISTIT VÍCE</div>
                 </div>
             </div>
@@ -15,12 +17,22 @@
 export default {
     mounted() {
         this.read()
+        window.addEventListener('resize', (function() {
+            if (this.loading)
+                return
+
+            this.calculateDimension()
+        }).bind(this))
     },
     data() {
         return {
             mpcs: null,
             loading: true,
-            ratio: 1.8
+            slider: false,
+            ratio: 1.8,
+            maxSteps: null,
+            currentStep: 0,
+            stepSize: null
         }
     },
     methods: {
@@ -28,18 +40,41 @@ export default {
             //get content width and height
             const wrapperWidth = parseInt(getComputedStyle(this.$refs.sliderWrapper, null).width)
             const wrapperHeight = parseInt(getComputedStyle(this.$refs.sliderWrapper, null).height)
+            const innerHeight = parseInt(getComputedStyle(this.$refs.sliderInner, null).height)
 
             //calculate component width and height
-            const componentHeight = wrapperHeight
-            const componentWidth = Math.round(componentHeight/this.ratio)
+            const componentHeight = innerHeight
+            const imageWidth = Math.floor(componentHeight/this.ratio)
+            const margin = 50
 
             //set component dimensions
-            const componentImages = this.$refs.sliderWrapper.querySelectorAll('div.image')
+            const components = this.$refs.sliderWrapper.querySelectorAll('div.sc-wrapper')
 
-            for (let i=0; i < componentImages.length; i++) {
-                componentImages[i].style.width = componentWidth + 'px'
-                componentImages[i].style.height = componentHeight + 'px'
-                const btn = componentImages[i].querySelector('.button');
+            //calc number of displaying components
+            let displayingNumber = Math.floor(wrapperWidth/(imageWidth + margin))
+            if (displayingNumber >= components.length) {
+                displayingNumber = components.length
+                this.disableSlider()
+            } else {
+                this.maxSteps = components.length - displayingNumber
+                this.currentStep = 0
+                this.stepSize = Math.round(wrapperWidth/displayingNumber)
+                this.enableSlider()
+            }
+
+            //calc dimensions from components number
+            const componentWidth = Math.round(wrapperWidth/displayingNumber)
+
+            //set slider inner width
+            const innerCalculatedWidth = componentWidth * components.length
+            this.$refs.sliderInner.style.width = innerCalculatedWidth + 'px'
+
+            for (let i=0; i < components.length; i++) {
+                components[i].style.width = componentWidth + 'px'
+                const image = components[i].querySelector('.image')
+                image.style.width = imageWidth + 'px'
+                image.style.height = componentHeight + 'px'
+                const btn = image.querySelector('.button');
                 btn.style.lineHeight = (parseInt(getComputedStyle(btn, null).height) - 6) + 'px'
                 btn.addEventListener('click', function(e){
                     window.DSSC.goto(i+2)
@@ -58,6 +93,48 @@ export default {
                     self.calculateDimension()
                 })
             })
+        },
+        enableSlider() {
+            this.slider = true
+            this.setSliderActions()
+        },
+        disableSlider() {
+            this.unsetSliderActions()
+        },
+        setSliderActions() {
+            this.$nextTick(function() {
+                const la = this.$refs.leftArrow
+                const ra = this.$refs.rightArrow
+
+                la.addEventListener('click', (this.prevSlide).bind(this))
+                ra.addEventListener('click', (this.nextSlide).bind(this))
+            })
+        },
+        unsetSliderActions() {
+            const la = this.$refs.leftArrow
+            const ra = this.$refs.rightArrow
+
+            la.removeEventListener('click', (this.prevSlide).bind(this))
+            ra.removeEventListener('click', (this.nextSlide).bind(this))
+            this.slider = false
+        },
+        nextSlide() {
+            console.log('right')
+            if (this.currentStep < this.maxSteps) {
+                this.currentStep++
+                this.updateSlide()
+            }
+        },
+        prevSlide() {
+            console.log('left')
+            if (this.currentStep > 0) {
+                this.currentStep--
+                this.updateSlide()
+            }
+        },
+        updateSlide() {
+            console.table(this.currentStep, this.stepSize, this.maxSteps)
+            this.$refs.sliderInner.style.marginLeft = (-(this.currentStep * this.stepSize)) + 'px'
         }
     }
 }
@@ -65,28 +142,29 @@ export default {
 
 <style scoped>
 .slider-wrapper {
-    height: 40vh;
-    margin: 5vh 0;
-    /* overflow: hidden; */
+    height: 50vh;
+    overflow: hidden;
+    position: relative;
 }
 .slider-inner {
-    display: flex;
+    margin: 5vh 0;
+    height: 40vh;
+    transition: margin-left .5s ease-in-out;
 }
-/* .slider-inner::after {
+.slider-inner::after {
     content: "";
     display: block;
     clear: both;
-} */
+}
 .sc-wrapper {
-    /* float: left; */
-    flex: auto;
+    float: left;
 }
 .image {
     position: relative;
     width: 222px;
     height: 413px;
     background-size: cover;
-    box-shadow: 0px 2px 50px rgba(14, 41, 60, 0.521569);
+    box-shadow: 0px 2px 25px rgba(14, 41, 60, 0.521569);
     /* margin-right: 2em; */
     margin: 0 auto;
 }
@@ -102,8 +180,8 @@ export default {
     font-family: Hind;
     font-style: normal;
     font-weight: 500;
-    font-size: 22px;
-    line-height: 32px;
+    font-size: 100%;
+    line-height: 1.5em;
     padding: 12px;
 }
 .button {
@@ -125,5 +203,32 @@ export default {
 }
 .button:hover {
     background: linear-gradient(165.21deg, #00E1C6 0%, #19BBD5 100%);
+}
+.slider-arrow-left {
+    position: absolute;
+    width: 50px;
+    height: 100%;
+    background-image: url("/slider-arrow-left.svg");
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    cursor: pointer;
+    z-index: 9999;
+}
+.slider-arrow-right {
+    position: absolute;
+    width: 50px;
+    height: 100%;
+    right: 0;
+    background-image: url("/slider-arrow-right.svg");
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    cursor: pointer;
+    z-index: 9999;
+}
+.svg-bg {
+    width: inherit;
+    height: inherit;
 }
 </style>

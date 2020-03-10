@@ -56,17 +56,18 @@
                 </div>
             </div>
         </section>
+        @foreach ($mpcs as $mpc)
         <section class="screen">
-            <div class="container"></div>
+            <div class="container">
+                <div class="sc-screen-title">{{$mpc->title}}</div>
+                <div class="sc-screen-container" style="
+                    background-image:url('{{Storage::url($mpc->screen_image)}}');
+                    color: {{$mpc->font_color}}
+                ">
+                    {{$mpc->description}}
+                </div>
+            </div>
         </section>
-        <section class="screen">
-            <div class="container"></div>
-        </section>
-        <section class="screen">
-            <div class="container"></div>
-        </section>
-        <section class="screen">
-            <div class="container"></div>
-        </section>
+        @endforeach
     </div>
 @endsection

@@ -1,8 +1,8 @@
 <template>
-    <div v-if="!loading" class="slider-wrapper" ref="sliderWrapper">
+    <div v-if="!loading" @click="calculateDimension" class="slider-wrapper" ref="sliderWrapper">
         <div v-for="mpc in mpcs" class="sc-wrapper">
-            <div class="image" ref="imagePreview" v-bind:style="{ backgroundImage: 'url(' + mpc.slider_image + ')' }">
-                <div ref="sliderCaption" class="caption">{{mpc.title}}</div>
+            <div class="image" v-bind:style="{ backgroundImage: 'url(' + mpc.slider_image + ')' }">
+                <div class="caption">{{mpc.title}}</div>
                 <div class="button">ZJISTIT VÍCE</div>
             </div>
         </div>
@@ -17,20 +17,40 @@ export default {
     data() {
         return {
             mpcs: null,
-            loading: true
+            loading: true,
+            ratio: 1.8
         }
     },
     methods: {
         calculateDimension() {
+            //get content width and height
+            const sliderWrapper = document.querySelector('.slider-wrapper')
+            const wrapperWidth = parseInt(getComputedStyle(sliderWrapper, null).width)
+            const wrapperHeight = parseInt(getComputedStyle(sliderWrapper, null).height)
 
+            //calculate component width and height
+            const componentHeight = wrapperHeight
+            const componentWidth = Math.round(componentHeight/this.ratio)
+
+            //set component's dimensions
+            componentImages = this.$refs.sliderWrapper.querySelectorAll('.image')
+
+            for (const image of componentImages) {
+                image.style.width = componentWidth + 'px'
+                image.style.height = componentHeight + 'px'
+            }
         },
         read() {
+            const self = this
             axios.post('/api/mpc', {method:'getMPCs'}).then((response) => {
                 this.mpcs = response.data.data
-                this.calculateDimension()
+                // this.calculateDimension()
             })
             .catch(err => console.error(err))
-            .finally(() => (this.loading = false))
+            .finally(() => {
+                this.loading = false
+                // this.calculateDimension()
+            })
         }
     }
 }

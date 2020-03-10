@@ -1926,24 +1926,58 @@ __webpack_require__.r(__webpack_exports__);
   data: function data() {
     return {
       mpcs: null,
-      loading: true
+      loading: true,
+      ratio: 1.8
     };
   },
   methods: {
-    calculateDimension: function calculateDimension() {},
+    calculateDimension: function calculateDimension() {
+      //get content width and height
+      var sliderWrapper = document.querySelector('.slider-wrapper');
+      var wrapperWidth = parseInt(getComputedStyle(sliderWrapper, null).width);
+      var wrapperHeight = parseInt(getComputedStyle(sliderWrapper, null).height); //calculate component width and height
+
+      var componentHeight = wrapperHeight;
+      var componentWidth = Math.round(componentHeight / this.ratio); //set component's dimensions
+
+      componentImages = this.$refs.sliderWrapper.querySelectorAll('.image');
+      var _iteratorNormalCompletion = true;
+      var _didIteratorError = false;
+      var _iteratorError = undefined;
+
+      try {
+        for (var _iterator = componentImages[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+          var image = _step.value;
+          image.style.width = componentWidth + 'px';
+          image.style.height = componentHeight + 'px';
+        }
+      } catch (err) {
+        _didIteratorError = true;
+        _iteratorError = err;
+      } finally {
+        try {
+          if (!_iteratorNormalCompletion && _iterator["return"] != null) {
+            _iterator["return"]();
+          }
+        } finally {
+          if (_didIteratorError) {
+            throw _iteratorError;
+          }
+        }
+      }
+    },
     read: function read() {
       var _this = this;
 
+      var self = this;
       axios.post('/api/mpc', {
         method: 'getMPCs'
       }).then(function (response) {
-        _this.mpcs = response.data.data;
-
-        _this.calculateDimension();
+        _this.mpcs = response.data.data; // this.calculateDimension()
       })["catch"](function (err) {
         return console.error(err);
       })["finally"](function () {
-        return _this.loading = false;
+        _this.loading = false; // this.calculateDimension()
       });
     }
   }
@@ -38334,27 +38368,23 @@ var render = function() {
   return !_vm.loading
     ? _c(
         "div",
-        { ref: "sliderWrapper", staticClass: "slider-wrapper" },
+        {
+          ref: "sliderWrapper",
+          staticClass: "slider-wrapper",
+          on: { click: _vm.calculateDimension }
+        },
         _vm._l(_vm.mpcs, function(mpc) {
           return _c("div", { staticClass: "sc-wrapper" }, [
             _c(
               "div",
               {
-                ref: "imagePreview",
-                refInFor: true,
                 staticClass: "image",
                 style: { backgroundImage: "url(" + mpc.slider_image + ")" }
               },
               [
-                _c(
-                  "div",
-                  {
-                    ref: "sliderCaption",
-                    refInFor: true,
-                    staticClass: "caption"
-                  },
-                  [_vm._v(_vm._s(mpc.title))]
-                ),
+                _c("div", { staticClass: "caption" }, [
+                  _vm._v(_vm._s(mpc.title))
+                ]),
                 _vm._v(" "),
                 _c("div", { staticClass: "button" }, [_vm._v("ZJISTIT VÍCE")])
               ]

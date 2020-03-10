@@ -119,6 +119,16 @@ class MainPageComponentController extends Controller
                     $response['msg'][] = "Could not find component with id: {$request->id}";
                 }
                 break;
+            case 'getMPCs':
+                $mpcs = MainPageComponent::all();
+                $data = [];
+                foreach( $mpcs as $mpc) {
+                    $mpc->slider_image = Storage::url($mpc->slider_image);
+                    $mpc->screen_image = Storage::url($mpc->screen_image);
+                    $data[] = $mpc;
+                }
+                $response['data'] = $data;
+                break;
             case 'createMPC':
                 // Validation
                 $validator = Validator::make($request->all(), [

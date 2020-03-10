@@ -113,8 +113,7 @@ var DSScreen = /*#__PURE__*/function () {
     this.screenWrapper.style.transition = 'margin-top .5s ease-in'; // find all screen sections
 
     this.currentScreen = 1;
-    this.screens = document.querySelectorAll('section.screen');
-    console.log(this.screens); // scroll controll
+    this.screens = document.querySelectorAll('section.screen'); // scroll controll
 
     document.addEventListener("wheel", this.wheelHandler.bind(this), {
       passive: false
@@ -128,11 +127,13 @@ var DSScreen = /*#__PURE__*/function () {
     document.addEventListener("touchend", this.touchEndHandler.bind(this), {
       passive: false
     });
+    this.updateScreen();
   }
 
   _createClass(DSScreen, [{
     key: "touchStartHandler",
     value: function touchStartHandler(e) {
+      if (e.target.classList.contains('navbar-toggler-icon')) return;
       e.preventDefault();
       this.touchStartY = e.changedTouches[0].screenY;
     }
@@ -152,6 +153,7 @@ var DSScreen = /*#__PURE__*/function () {
   }, {
     key: "touchEndHandler",
     value: function touchEndHandler(e) {
+      if (e.target.classList.contains('navbar-toggler-icon')) return;
       e.preventDefault();
       if (!this.swipeDirection) return;
 

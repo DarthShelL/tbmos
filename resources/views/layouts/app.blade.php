@@ -25,7 +25,9 @@
     @stack('styles')
 </head>
 <body>
-    @yield('content')
+    <div id="app">
+        @yield('content')
+    </div>
     @stack('footer_scripts')
 </body>
 </html>

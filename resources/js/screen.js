@@ -14,15 +14,18 @@ class DSScreen {
         // find all screen sections
         this.currentScreen = 1
         this.screens = document.querySelectorAll('section.screen')
-        console.log(this.screens)
 
         // scroll controll
         document.addEventListener("wheel", this.wheelHandler.bind(this), {passive: false})
         document.addEventListener("touchstart", this.touchStartHandler.bind(this), {passive: false})
         document.addEventListener("touchmove", this.touchMoveHandler.bind(this), {passive: false})
         document.addEventListener("touchend", this.touchEndHandler.bind(this), {passive: false})
+
+        this.updateScreen()
     }
     touchStartHandler(e) {
+        if (e.target.classList.contains('navbar-toggler-icon'))
+            return
         e.preventDefault()
         this.touchStartY = e.changedTouches[0].screenY
     }
@@ -38,6 +41,8 @@ class DSScreen {
         }
     }
     touchEndHandler(e) {
+        if (e.target.classList.contains('navbar-toggler-icon'))
+            return
         e.preventDefault()
         if (!this.swipeDirection)
             return

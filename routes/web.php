@@ -11,8 +11,11 @@
 |
 */
 
+use App\MainPageComponent;
+
 Route::get('/', function () {
-    return view('main');
+    $mpcs = MainPageComponent::all();
+    return view('main', compact('mpcs'));
 });
 
 Auth::routes(['register' => false]);

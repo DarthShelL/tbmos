@@ -163,3 +163,11 @@ section.screen > .container {
     left: 5vh;
     padding: 0 2em 0 3em;
 }
+
+.navbar-dark .navbar-nav .active > .nav-link {
+    color: #fff;
+    background-color: #050a198c;
+    min-width: 200px;
+    float: right;
+    padding: 5px 10px;
+}

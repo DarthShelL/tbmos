@@ -59,13 +59,13 @@ section.screen > .container {
     top: 7vh;
     height: 10vh;
     position: absolute;
-
     font-family: Hind;
     font-style: normal;
     font-weight: bold;
     font-size: 28px;
-    line-height: 77px;
+    line-height: 1.5em;
     color: #0E293C;
+    width: 70vw;
 }
 
 .sc-screen-container {
@@ -75,7 +75,7 @@ section.screen > .container {
     position: absolute;
     width: 80%;
 
-    box-shadow: 0px 2px 50px rgba(14, 41, 60, 0.168627);
+    box-shadow: 0px 2px 50px rgba(14, 41, 60, 0.2);
     font-family: Hind;
     font-style: normal;
     font-weight: normal;

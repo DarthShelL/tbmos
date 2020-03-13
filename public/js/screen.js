@@ -139,6 +139,7 @@ var DSScreen = /*#__PURE__*/function () {
       if (e.target.classList.contains('slider-arrow-left')) return;
       if (e.target.classList.contains('slider-arrow-right')) return;
       if (e.target.classList.contains('totop-btn')) return;
+      if (e.target.classList.contains('nav-link')) return;
       e.preventDefault();
       this.touchStartY = e.changedTouches[0].screenY;
     }
@@ -163,6 +164,7 @@ var DSScreen = /*#__PURE__*/function () {
       if (e.target.classList.contains('slider-arrow-left')) return;
       if (e.target.classList.contains('slider-arrow-right')) return;
       if (e.target.classList.contains('totop-btn')) return;
+      if (e.target.classList.contains('nav-link')) return;
       e.preventDefault();
       if (!this.swipeDirection) return;
 
@@ -223,7 +225,7 @@ var DSScreen = /*#__PURE__*/function () {
       }.bind(this), 500);
       var marginTop = (this.currentScreen - 1) * -100;
       this.screenWrapper.style.marginTop = marginTop + 'vh';
-      this.appDiv.style.backgroundPositionY = marginTop / 4 + 'vh';
+      this.appDiv.style.backgroundPositionY = marginTop / 4 + 40 + 'vh';
     }
   }]);
 

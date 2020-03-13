@@ -110,3 +110,56 @@ section.screen > .container {
     max-height: 50px;
     max-width: 50px; */
 }
+
+.navbar-light .navbar-nav .show > .nav-link,
+.navbar-light .navbar-nav .active > .nav-link,
+.navbar-light .navbar-nav .nav-link.show,
+.navbar-light .navbar-nav .nav-link.active {
+    font-family: Hind;
+    font-style: normal;
+    font-weight: 300;
+    font-size: 16px;
+    line-height: 24px;
+    /* or 150% */
+
+
+    color: #FFFFFF;
+}
+
+.header-title {
+    font-family: Hind;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 2em;
+    line-height: 2em;
+    color: #FFFFFF;
+    position: absolute;
+    left: 10%;
+    top: 3em;
+}
+.header-description {
+    font-family: Hind;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 1em;
+    line-height: 1.5em;
+    color: #FFFFFF;
+    position: absolute;
+    left: 10%;
+    top: 10em;
+    max-width: 28em;
+}
+.header-caption {
+    font-family: Hind;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 2em;
+    line-height: 2em;
+    color: #0E293C;
+    background-color: #fff;
+    width: fit-content;
+    position: absolute;
+    bottom: 50vh;
+    left: 5vh;
+    padding: 0 2em 0 3em;
+}

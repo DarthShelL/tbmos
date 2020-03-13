@@ -35,6 +35,8 @@ class DSScreen {
             return
         if (e.target.classList.contains('totop-btn'))
             return
+        if (e.target.classList.contains('nav-link'))
+            return
 
         e.preventDefault()
         this.touchStartY = e.changedTouches[0].screenY
@@ -61,7 +63,10 @@ class DSScreen {
             return
         if (e.target.classList.contains('totop-btn'))
             return
-        e.preventDefault()
+        if (e.target.classList.contains('nav-link'))
+            return
+
+            e.preventDefault()
         if (!this.swipeDirection)
             return
 
@@ -111,7 +116,7 @@ class DSScreen {
         }).bind(this), 500)
         const marginTop = (this.currentScreen - 1) * -100
         this.screenWrapper.style.marginTop = marginTop + 'vh'
-        this.appDiv.style.backgroundPositionY = (marginTop/4) + 'vh'
+        this.appDiv.style.backgroundPositionY = (marginTop/4 + 40) + 'vh'
     }
 }
 

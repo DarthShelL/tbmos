@@ -81,7 +81,7 @@
                     {{mpc.title}}
                 </div>
                 <div v-if="!loading" class="screen-preview" ref="screenPreview" v-bind:style="{ backgroundImage: 'url(' + mpc.screen_image + ')' }">
-                    {{mpc.description}}
+                    <p>{{mpc.description}}</p>
                 </div>
             </div>
         </div>
@@ -335,6 +335,12 @@
     color: #ffffff;
     padding: 15px;
     text-shadow: 0px 0px 5px #000;
+}
+.screen-preview > p {
+    background-color: #1122339c;
+    display: block;
+    width: fit-content;
+    padding: 5px 10px;
 }
 .screen-title {
     position: absolute;

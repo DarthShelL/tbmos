@@ -20,7 +20,6 @@ export default {
         window.addEventListener('resize', (function() {
             if (this.loading)
                 return
-
             this.calculateDimension()
         }).bind(this))
     },

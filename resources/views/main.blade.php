@@ -11,7 +11,7 @@
 @section('content')
     <div class="screen-wrapper">
         <section class="screen header-screen">
-            <div class="container">
+            <div class="">
                 <div class="header-bg">
                     <nav class="navbar navbar-expand-lg navbar-light">
                         <a class="navbar-brand" href="#">Navbar</a>
@@ -51,20 +51,23 @@
                 </div>
             </div>
             <div class="slider-section">
-                <div class="container">
+                <div class="">
                     <mpc-slider></mpc-slider>
                 </div>
             </div>
         </section>
         @foreach ($mpcs as $mpc)
         <section class="screen">
-            <div class="container">
+            <div class="">
+                <div class="totop-btn"></div>
                 <div class="sc-screen-title">{{$mpc->title}}</div>
                 <div class="sc-screen-container" style="
                     background-image:url('{{Storage::url($mpc->screen_image)}}');
                     color: {{$mpc->font_color}}
                 ">
-                    {{$mpc->description}}
+                    <p>
+                        {{$mpc->description}}
+                    </p>
                 </div>
             </div>
         </section>

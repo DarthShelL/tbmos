@@ -104,7 +104,8 @@ var DSScreen = /*#__PURE__*/function () {
     _classCallCheck(this, DSScreen);
 
     this.moving = false;
-    this.touchStartY = null; // stasis body
+    this.touchStartY = null;
+    this.appDiv = document.getElementById('app'); // stasis body
 
     document.body.style.overflow = 'hidden';
     document.body.style.height = '100vh'; // wrapper
@@ -137,6 +138,7 @@ var DSScreen = /*#__PURE__*/function () {
       if (e.target.classList.contains('button')) return;
       if (e.target.classList.contains('slider-arrow-left')) return;
       if (e.target.classList.contains('slider-arrow-right')) return;
+      if (e.target.classList.contains('totop-btn')) return;
       e.preventDefault();
       this.touchStartY = e.changedTouches[0].screenY;
     }
@@ -160,6 +162,7 @@ var DSScreen = /*#__PURE__*/function () {
       if (e.target.classList.contains('button')) return;
       if (e.target.classList.contains('slider-arrow-left')) return;
       if (e.target.classList.contains('slider-arrow-right')) return;
+      if (e.target.classList.contains('totop-btn')) return;
       e.preventDefault();
       if (!this.swipeDirection) return;
 
@@ -220,14 +223,26 @@ var DSScreen = /*#__PURE__*/function () {
       }.bind(this), 500);
       var marginTop = (this.currentScreen - 1) * -100;
       this.screenWrapper.style.marginTop = marginTop + 'vh';
+      this.appDiv.style.backgroundPositionY = marginTop / 4 + 'vh';
     }
   }]);
 
   return DSScreen;
 }();
 
+document.addEventListener("click", function (e) {
+  if (e.target.classList.contains('totop-btn')) {
+    DSSC["goto"](1);
+  }
+});
 document.addEventListener("DOMContentLoaded", function () {
   window.DSSC = new DSScreen();
+  console.log('DOMContentLoaded');
+  setTimeout(function () {
+    if (window.DSSC.currentScreen == 1) {
+      document.querySelector('html').scrollTo(0, 0);
+    }
+  }, 500);
 });
 
 /***/ }),

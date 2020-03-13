@@ -16,7 +16,7 @@ class CreateMainPageComponentsTable extends Migration
         Schema::create('main_page_components', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('title');
-            $table->string('description');
+            $table->text('description');
             $table->string('caption_color');
             $table->string('font_color');
             $table->string('screen_image')->nullable();

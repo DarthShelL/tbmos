@@ -7,8 +7,10 @@ body {
     background-image: url("/BG_white.svg");
     background-repeat: repeat-y;
     background-position-x: center;
-    background-size: contain;
+    background-size: cover;
     transition: background-position-y 1.5s ease-in-out;
+    height: 100vh;
+    overflow: hidden;
 }
 
 section.screen {

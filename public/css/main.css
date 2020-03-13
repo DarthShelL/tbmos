@@ -164,10 +164,12 @@ section.screen > .container {
     padding: 0 2em 0 3em;
 }
 
-.navbar-dark .navbar-nav .active > .nav-link {
+.navbar-collapse.show .nav-link {
     color: #fff;
     background-color: #050a198c;
     min-width: 200px;
     float: right;
-    padding: 5px 10px;
+    padding-right: 10px;
+    z-index: 99999;
+    position: relative;
 }

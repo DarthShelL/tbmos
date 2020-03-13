@@ -75,7 +75,9 @@
         <div class="container screen-wrapper">
             <div class="page-preview">
                 <div v-if="loading" class="screen-title" ref="screenTitle"></div>
-                <div v-if="loading" class="screen-preview" ref="screenPreview"></div>
+                <div v-if="loading" class="screen-preview" ref="screenPreview">
+                    <p></p>
+                </div>
 
                 <div v-if="!loading" class="screen-title" ref="screenTitle">
                     {{mpc.title}}
@@ -189,7 +191,7 @@
             },
             descriptionChange(e) {
                 const input = e.target
-                this.$refs.screenPreview.innerText = input.value
+                this.$refs.screenPreview.querySelector('p').innerText = input.value
             },
             titleChange(e) {
                 const input = e.target

@@ -2224,6 +2224,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   mpc: {},
   props: ['id'],
@@ -2312,7 +2314,7 @@ __webpack_require__.r(__webpack_exports__);
     },
     descriptionChange: function descriptionChange(e) {
       var input = e.target;
-      this.$refs.screenPreview.innerText = input.value;
+      this.$refs.screenPreview.querySelector('p').innerText = input.value;
     },
     titleChange: function titleChange(e) {
       var input = e.target;
@@ -38744,7 +38746,9 @@ var render = function() {
           : _vm._e(),
         _vm._v(" "),
         _vm.loading
-          ? _c("div", { ref: "screenPreview", staticClass: "screen-preview" })
+          ? _c("div", { ref: "screenPreview", staticClass: "screen-preview" }, [
+              _c("p")
+            ])
           : _vm._e(),
         _vm._v(" "),
         !_vm.loading

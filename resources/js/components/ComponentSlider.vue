@@ -31,7 +31,8 @@ export default {
             ratio: 1.8,
             maxSteps: null,
             currentStep: 0,
-            stepSize: null
+            stepSize: null,
+            sliderActions: false
         }
     },
     methods: {
@@ -57,8 +58,9 @@ export default {
             } else {
                 this.maxSteps = components.length - displayingNumber
                 this.currentStep = 0
-                this.stepSize = Math.round(wrapperWidth/displayingNumber)
+                this.stepSize = Math.floor(wrapperWidth/displayingNumber)
                 this.enableSlider()
+                this.updateSlide()
             }
 
             //calc dimensions from components number
@@ -101,12 +103,18 @@ export default {
             this.unsetSliderActions()
         },
         setSliderActions() {
+            if (this.sliderActions)
+                return
             this.$nextTick(function() {
                 const la = this.$refs.leftArrow
                 const ra = this.$refs.rightArrow
 
+                // la.removeEventListener('click', (this.prevSlide).bind(this))
+                // ra.removeEventListener('click', (this.nextSlide).bind(this))
                 la.addEventListener('click', (this.prevSlide).bind(this))
                 ra.addEventListener('click', (this.nextSlide).bind(this))
+
+                this.sliderActions = true
             })
         },
         unsetSliderActions() {
@@ -122,23 +130,25 @@ export default {
             la.removeEventListener('click', (this.prevSlide).bind(this))
             ra.removeEventListener('click', (this.nextSlide).bind(this))
             this.slider = false
+            this.sliderActions = false
         },
         nextSlide() {
-            console.log('right')
             if (this.currentStep < this.maxSteps) {
                 this.currentStep++
                 this.updateSlide()
             }
         },
         prevSlide() {
-            console.log('left')
             if (this.currentStep > 0) {
                 this.currentStep--
                 this.updateSlide()
             }
         },
         updateSlide() {
-            console.table(this.currentStep, this.stepSize, this.maxSteps)
+            console.table({
+                stepSize: this.stepSize,
+                currentStep: this.currentStep
+            })
             this.$refs.sliderInner.style.marginLeft = (-(this.currentStep * this.stepSize)) + 'px'
         }
     }

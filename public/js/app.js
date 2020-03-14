@@ -1939,7 +1939,8 @@ __webpack_require__.r(__webpack_exports__);
       ratio: 1.8,
       maxSteps: null,
       currentStep: 0,
-      stepSize: null
+      stepSize: null,
+      sliderActions: false
     };
   },
   methods: {
@@ -1963,8 +1964,9 @@ __webpack_require__.r(__webpack_exports__);
       } else {
         this.maxSteps = components.length - displayingNumber;
         this.currentStep = 0;
-        this.stepSize = Math.round(wrapperWidth / displayingNumber);
+        this.stepSize = Math.floor(wrapperWidth / displayingNumber);
         this.enableSlider();
+        this.updateSlide();
       } //calc dimensions from components number
 
 
@@ -2014,11 +2016,15 @@ __webpack_require__.r(__webpack_exports__);
       this.unsetSliderActions();
     },
     setSliderActions: function setSliderActions() {
+      if (this.sliderActions) return;
       this.$nextTick(function () {
         var la = this.$refs.leftArrow;
-        var ra = this.$refs.rightArrow;
+        var ra = this.$refs.rightArrow; // la.removeEventListener('click', (this.prevSlide).bind(this))
+        // ra.removeEventListener('click', (this.nextSlide).bind(this))
+
         la.addEventListener('click', this.prevSlide.bind(this));
         ra.addEventListener('click', this.nextSlide.bind(this));
+        this.sliderActions = true;
       });
     },
     unsetSliderActions: function unsetSliderActions() {
@@ -2030,25 +2036,25 @@ __webpack_require__.r(__webpack_exports__);
       la.removeEventListener('click', this.prevSlide.bind(this));
       ra.removeEventListener('click', this.nextSlide.bind(this));
       this.slider = false;
+      this.sliderActions = false;
     },
     nextSlide: function nextSlide() {
-      console.log('right');
-
       if (this.currentStep < this.maxSteps) {
         this.currentStep++;
         this.updateSlide();
       }
     },
     prevSlide: function prevSlide() {
-      console.log('left');
-
       if (this.currentStep > 0) {
         this.currentStep--;
         this.updateSlide();
       }
     },
     updateSlide: function updateSlide() {
-      console.table(this.currentStep, this.stepSize, this.maxSteps);
+      console.table({
+        stepSize: this.stepSize,
+        currentStep: this.currentStep
+      });
       this.$refs.sliderInner.style.marginLeft = -(this.currentStep * this.stepSize) + 'px';
     }
   }

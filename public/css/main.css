@@ -164,6 +164,19 @@ section.screen > .container {
     padding: 0 2em 0 3em;
 }
 
+.navbar-dark .navbar-nav .show > .nav-link,
+.navbar-dark .navbar-nav .active > .nav-link,
+.navbar-dark .navbar-nav .nav-link.show,
+.navbar-dark .navbar-nav .nav-link.active {
+    color: #fff;
+    font-family: Hind;
+    font-style: normal;
+    font-weight: 300;
+    font-size: 1rem;
+    line-height: 1.5rem;
+    text-shadow: 0px 2px 20px #000000;
+}
+
 .navbar-collapse.show .nav-link {
     color: #fff;
     background-color: #050a198c;

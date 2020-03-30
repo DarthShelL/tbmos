@@ -99,7 +99,9 @@ function _defineProperties(target, props) { for (var i = 0; i < props.length; i+
 
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
-var DSScreen = /*#__PURE__*/function () {
+var DSScreen =
+/*#__PURE__*/
+function () {
   function DSScreen() {
     _classCallCheck(this, DSScreen);
 
@@ -256,7 +258,7 @@ document.addEventListener("DOMContentLoaded", function () {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! /var/www/tbmos/resources/js/screen.js */"./resources/js/screen.js");
+module.exports = __webpack_require__(/*! /mnt/d/projects/tbm_os/resources/js/screen.js */"./resources/js/screen.js");
 
 
 /***/ })

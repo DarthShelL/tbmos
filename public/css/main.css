@@ -161,7 +161,7 @@ section.screen > .container {
     position: absolute;
     bottom: 50vh;
     left: 5vh;
-    padding: 0 2em 0 3em;
+    padding: 0 1em 0 2em;
 }
 
 .navbar-dark .navbar-nav .show > .nav-link,

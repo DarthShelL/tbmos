@@ -215,14 +215,16 @@ iPad Air is an example of a Breakpoint 4 with 768px
 
 @media screen and (max-device-width:414px), screen and (max-width:414px) {
     .header-title {
-
+        font-size: 2rem;
+        line-height: 6rem;
+        top: 2em;
     }
     .header-description {
         font-size: 1rem;
         line-height: 1.5rem;
         left: 10%;
         top: 9rem;
-        max-width: 20rem;
+        max-width: 19rem;
     }
     .header-caption {
         font-size: 2rem;
@@ -233,7 +235,9 @@ iPad Air is an example of a Breakpoint 4 with 768px
 
 @media screen and (max-device-width:320px), screen and (max-width:320px) {
     .header-title {
-
+        font-size: 2em;
+        line-height: 6rem;
+        top: 2em;
     }
     .header-description {
         font-size: 1rem;

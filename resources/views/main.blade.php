@@ -32,17 +32,9 @@
                                     <a class="nav-link" href="#" onclick="DSSC.goto({{$i}})">{{$mpc->title}}</span></a>
                                 </li>
                                 @endforeach
-                                {{-- <li class="nav-item dropdown">
-                                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        Dropdown
-                                    </a> --}}
-                                    {{-- <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                        <a class="dropdown-item" href="#">Action</a>
-                                        <a class="dropdown-item" href="#">Another action</a>
-                                        <div class="dropdown-divider"></div>
-                                        <a class="dropdown-item" href="#">Something else here</a>
-                                    </div> --}}
-                                {{-- </li> --}}
+                                <li class="nav-item active">
+                                    <a class="nav-link" href="#" onclick="DSSC.goto({{++$i}})">kontaktní údaje</span></a>
+                                </li>
                             </ul>
                         </div>
                     </nav>
@@ -73,5 +65,56 @@
             </div>
         </section>
         @endforeach
+        <section class="screen footer">
+            <div class="totop-btn"></div>
+            <div class="flexbox">
+                <div class="container">
+                    <div class="row owners">
+                        <div class="col-6">
+                            <span class="name">
+                                Miroslav Usnul
+                            </span>
+                            <br>
+                            <span class="phone">
+                                +420774440905
+                            </span>
+                        </div>
+                        <div class="col-6">
+                            <span class="name">
+                                Martin Zábojník
+                            </span>
+                            <br>
+                            <span class="phone">
+                                +420735286795
+                            </span>
+                        </div>
+                    </div>
+                    <br>
+                    <br>
+                    <br>
+                    <div class="row contacts">
+                        <div class="col-12">
+                            DEREO, spol. s r. o.
+                        </div>
+                        <div class="col-12">
+                            IČO: 25630563
+                        </div>
+                        <div class="col-12">
+                            Plzeňská 2561/164, Smíchov, 150 00 Praha 5
+                        </div>
+                    </div>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <div class="row created">
+                        <div class="container text-center">
+                            <a href="mailto:shellnosferatu@gmail.com">created by Vladimir Shelestov aka DarthShelL</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
     </div>
 @endsection
